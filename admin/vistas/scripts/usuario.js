@@ -12,6 +12,10 @@ function init() {
         guardaryeditar(e);
     })
 
+    $("#modalSubirNomina").on('bs.shown.modal', function () {
+        $('#formularioNomina').get(0).reset();
+    });
+
     $("#imagenmuestra").hide();
     //mostramos los permisos
     $.post("../ajax/usuario.php?op=permisos&id=", function (r) {
@@ -56,12 +60,15 @@ function mostrarform(flag) {
         $("#formularioregistros").show();
         $("#btnGuardar").prop("disabled", false);
         $("#btnagregar").hide();
+        $("#btnSubirNomina").hide();
     } else {
         $("#listadoregistros").show();
         $("#formularioregistros").hide();
         $("#btnagregar").show();
+        $("#btnSubirNomina").show();
     }
 }
+
 function mostrarform_clave(flag) {
     limpiar();
     if (flag) {
@@ -191,11 +198,7 @@ function mostrar(idusuario) {
 
 function mostrar_clave(idusuario) {
     $("#getCodeModal").modal('show');
-    $.post("../ajax/usuario.php?op=mostrar_clave", { idusuario: idusuario },
-        function (data, status) {
-            data = JSON.parse(data);
-            $("#idusuarioc").val(data.idusuario);
-        });
+    $("#idusuarioc").val(idusuario);
 }
 
 //funcion para desactivar
@@ -227,6 +230,10 @@ function generar(longitud) {
     var contraseña = "";
     for (i = 0; i < long; i++) contraseña += caracteres.charAt(Math.floor(Math.random() * caracteres.length));
     $("#codigo_persona").val(contraseña);
+}
+
+function mostrarNominaForm(idusuario) {
+    $("#modalSubirNomina").modal('show');
 }
 
 init();
