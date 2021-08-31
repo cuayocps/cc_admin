@@ -1,6 +1,7 @@
 <?php
 //incluir la conexion de base de datos
-require "../config/Conexion.php";
+require_once dirname(__DIR__) . '/config/Conexion.php';
+
 class Usuario
 {
 
@@ -13,9 +14,8 @@ class Usuario
     //metodo insertar regiustro
     public function insertar($nombre, $apellidos, $login, $iddepartamento, $idtipousuario, $email, $clavehash, $imagen, $usuariocreado, $codigo_persona)
     {
-        date_default_timezone_set('America/Mexico_City');
         $fechacreado = date('Y-m-d H:i:s');
-        $sql = "INSERT INTO usuarios (nombre,apellidos,login,iddepartamento,idtipousuario,email,password,imagen,estado,fechacreado,usuariocreado,codigo_persona) VALUES ('$nombre','$apellidos','$login','$iddepartamento','$idtipousuario','$email','$clavehash','$imagen','1','$fechacreado','$usuariocreado','$codigo_persona')";
+        $sql = "INSERT INTO usuarios (nombre,apellidos,login,iddepartamento,idtipousuario,email,password,imagen,fechacreado,usuariocreado,codigo_persona,estado,idmensaje) VALUES ('$nombre','$apellidos','$login','$iddepartamento','$idtipousuario','$email','$clavehash','$imagen','$fechacreado','$usuariocreado','$codigo_persona','1','0')";
         return ejecutarConsulta($sql);
     }
 
@@ -71,4 +71,20 @@ class Usuario
         $sql = "SELECT u.codigo_persona,u.idusuario,u.nombre,u.apellidos,u.login,u.idtipousuario,u.iddepartamento,u.email,u.imagen,u.login, tu.nombre as tipousuario FROM usuarios u INNER JOIN tipousuario tu ON u.idtipousuario=tu.idtipousuario WHERE login='$login' AND password='$clave' AND estado='1'";
         return ejecutarConsulta($sql);
     }
+
+    public function buscar($filtros)
+    {
+        global $conexion;
+        $filtros = array_map(function ($value) use ($conexion) {
+            return mysqli_real_escape_string($conexion, $value);
+        }, $filtros);
+        $where = [];
+        foreach ($filtros as $key => $value) {
+            $where[] = "$key = '$value'";
+        }
+        $sql = 'SELECT * FROM usuarios WHERE ' . implode(' AND ', $where);
+
+        return ejecutarConsultaSimpleFila($sql);
+    }
+
 }

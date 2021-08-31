@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once "../modelos/Usuario.php";
+require_once dirname(__DIR__) . '/modelos/Usuario.php';
 
 $usuario = new Usuario();
 
@@ -29,7 +29,6 @@ switch ($_GET["op"]) {
 
             $ext = explode(".", $_FILES["imagen"]["name"]);
             if ($_FILES['imagen']['type'] == "image/jpg" || $_FILES['imagen']['type'] == "image/jpeg" || $_FILES['imagen']['type'] == "image/png") {
-
                 $imagen = round(microtime(true)) . '.' . end($ext);
                 move_uploaded_file($_FILES["imagen"]["tmp_name"], "../files/usuarios/" . $imagen);
             }
@@ -132,7 +131,6 @@ switch ($_GET["op"]) {
             require "../config/Conexion.php";
 
             $sql = "UPDATE usuarios SET iteracion='1' WHERE idusuario='$id'";
-            echo $sql;
             ejecutarConsulta($sql);
         }
 

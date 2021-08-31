@@ -17,9 +17,10 @@ if (!isset($_SESSION['nombre'])) {
                 <div class="col-md-12">
                     <div class="box">
                         <div class="box-header with-border">
-                            <h1 class="box-title">Usuarios <button class="btn btn-success" onclick="mostrarform(true)" id="btnagregar"><i class="fa fa-plus-circle"></i>Agregar</button></h1>
+                            <h1 class="box-title">Usuarios</h1>
                             <div class="box-tools pull-right">
-
+                                <button class="btn btn-default" onclick="mostrarNominaForm(true)" id="btnSubirNomina"><i class="fa fa-cloud-upload"></i> Cargar Nómina</button>
+                                <button class="btn btn-success" onclick="mostrarform(true)" id="btnagregar"><i class="fa fa-plus-circle"></i> Agregar</button>
                             </div>
                         </div>
                         <!--box-header-->
@@ -103,11 +104,9 @@ if (!isset($_SESSION['nombre'])) {
                             </form>
                         </div>
 
-
-
-                        <!--modal para ver la venta-->
+                        <!--inicio de modal editar contraseña--->
                         <div class="modal fade" id="getCodeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                            <div class="modal-dialog" style="width: 20% !important;">
+                            <div class="modal-dialog modal-sm">
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -120,19 +119,61 @@ if (!isset($_SESSION['nombre'])) {
                                                 <input class="form-control" type="hidden" name="idusuarioc" id="idusuarioc">
                                                 <input class="form-control" type="password" name="clavec" id="clavec" maxlength="64" placeholder="Clave" required>
                                             </div>
-                                            <button class="btn btn-primary" type="submit" id="btnGuardar_clave"><i class="fa fa-save"></i> Guardar</button>
-                                            <button class="btn btn-danger" type="button" data-dismiss="modal"><i class="fa fa-arrow-circle-left"></i> Cancelar</button>
                                         </form>
-
-                                        <div class="modal-footer">
-                                            <button class="btn btn-default" type="button" data-dismiss="modal">Cerrar</button>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <div class="row">
+                                            <div class="col-md-6 text-left">
+                                                <button class="btn btn-default" type="button" data-dismiss="modal">Cerrar</button>
+                                            </div>
+                                            <div class="col-md-6 text-right">
+                                                <button class="btn btn-primary" type="submit" id="btnGuardar_clave"><i class="fa fa-save"></i> Guardar</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <!--inicio de modal editar contraseña--->
                             <!--fin de modal editar contraseña--->
-                            <!--fin centro-->
+                        </div>
+
+                        <div class="modal fade" id="modalSubirNomina" tabindex="-1" role="dialog" aria-hidden="true">
+                            <div class="modal-dialog modal-md">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        <h4 class="modal-title">Cargar Nómina</h4>
+                                    </div>
+                                    <form action="../ajax/nomina/cargar.php" name="formularioNomina" id="formularioNomina" method="POST" enctype="multipart/form-data">
+                                        <div class="modal-body">
+                                            <div id="grupoNomina" class="form-group">
+                                                <label for="nomina" class="col-form-label">Nómina XML:</label>
+                                                <input class="form-control" type="file" name="nomina" id="nomina" required />
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-6 col-sm-offset-3">
+                                                    <dl id="resumenNomina" class="row">
+                                                    </dl>
+                                                </div>
+                                            </div>
+                                            <h2 id="cargandoNomina" class="text-center">
+                                                <i class="fa fa-circle-o-notch fa-spin"></i>
+                                                cargando nómina...
+                                            </h2>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <div class="row">
+                                                <div class="col-md-6 text-left">
+                                                    <button class="btn btn-default" type="button" data-dismiss="modal">Cerrar</button>
+                                                </div>
+                                                <div id="botonesNomina" class="col-md-6 text-right">
+                                                    <a class="btn btn-default" href="/admin/ajax/nomina/planilla.php"><i class="fa fa-cloud-download"></i> Descargar planilla</a>
+                                                    <button class="btn btn-primary" type="submit" id="btnCargarNomina"><i class="fa fa-cloud-upload"></i> Cargar</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
 
                     </div>

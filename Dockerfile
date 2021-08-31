@@ -3,7 +3,10 @@ FROM php:5.6-apache
 RUN apt-get update -y && \
     apt-get install -y \
         git \
+        libfreetype6-dev \
+        libjpeg62-turbo-dev \
         libonig-dev \
+        libpng-dev \
         libzip-dev \
         openssl \
         unzip \
@@ -14,7 +17,9 @@ RUN apt-get update -y && \
     apt-get autoremove -y && \
     apt-get clean all
 
-RUN docker-php-ext-install \
+RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ && \
+    docker-php-ext-install \
+        gd \
         mbstring \
         mysqli \
         pdo \

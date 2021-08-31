@@ -1,6 +1,7 @@
 <?php
-//incluir la conexion de base de datos
-require "../config/Conexion.php";
+
+require_once dirname(__DIR__) . '/config/Conexion.php';
+
 class Departamento
 {
 
