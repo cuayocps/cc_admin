@@ -1,0 +1,25 @@
+version: '3.7'
+
+services:
+  application:
+    container_name: ccadmin-application
+    build:
+      context: .
+      dockerfile: Dockerfile-dev
+    ports:
+      - "80:80"
+    depends_on:
+      - database
+    volumes:
+      - ./:/srv
+
+  database:
+    container_name: ccadmin-database
+    image: mysql:5.7
+    volumes:
+      - ./docker/mysql:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=.sweetpwd.
+      - MYSQL_DATABASE=root
