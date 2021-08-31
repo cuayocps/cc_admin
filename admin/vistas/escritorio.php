@@ -3,7 +3,7 @@
 ob_start();
 session_start();
 if (!isset($_SESSION['nombre'])) {
-    header("Location: login.php");
+    header("Location: login.html");
 } else {
     require 'header.php';
     require_once('../modelos/Usuario.php');

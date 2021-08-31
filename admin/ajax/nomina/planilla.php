@@ -1,6 +1,7 @@
 <?php
-require '../../modelos/Departamento.php';
-require '../../modelos/Tipousuario.php';
+
+require_once dirname(dirname(__DIR__)) . '/modelos/Departamento.php';
+require_once dirname(dirname(__DIR__)) . '/modelos/Tipousuario.php';
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;

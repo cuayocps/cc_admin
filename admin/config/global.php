@@ -1,7 +1,7 @@
 <?php
 date_default_timezone_set('America/Santiago');
 
-require_once '../../../vendor/autoload.php';
+require_once dirname(dirname(__DIR__)) . '/vendor/autoload.php';
 
 // error_reporting(E_ALL);
 //ip de la pc servidor base de datos

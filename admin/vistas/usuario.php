@@ -143,25 +143,35 @@ if (!isset($_SESSION['nombre'])) {
                                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                                         <h4 class="modal-title">Cargar Nómina</h4>
                                     </div>
-                                    <div class="modal-body">
-                                        <form action="" name="formularioNomina" id="formularioNomina" method="POST">
-                                            <div class="form-group">
+                                    <form action="../ajax/nomina/cargar.php" name="formularioNomina" id="formularioNomina" method="POST" enctype="multipart/form-data">
+                                        <div class="modal-body">
+                                            <div id="grupoNomina" class="form-group">
                                                 <label for="nomina" class="col-form-label">Nómina XML:</label>
                                                 <input class="form-control" type="file" name="nomina" id="nomina" required />
                                             </div>
-                                        </form>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <div class="row">
-                                        <div class="col-md-6 text-left">
-                                                <button class="btn btn-default" type="button" data-dismiss="modal">Cerrar</button>
+                                            <div class="row">
+                                                <div class="col-sm-6 col-sm-offset-3">
+                                                    <dl id="resumenNomina" class="row">
+                                                    </dl>
+                                                </div>
                                             </div>
-                                            <div class="col-md-6 text-right">
-                                                <a class="btn btn-default" href="/admin/ajax/nomina/planilla.php"><i class="fa fa-cloud-download"></i> Descargar planilla</a>
-                                                <button class="btn btn-primary" type="submit" id="btnCargarNomina"><i class="fa fa-cloud-upload"></i> Cargar</button>
+                                            <h2 id="cargandoNomina" class="text-center">
+                                                <i class="fa fa-circle-o-notch fa-spin"></i>
+                                                cargando nómina...
+                                            </h2>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <div class="row">
+                                                <div class="col-md-6 text-left">
+                                                    <button class="btn btn-default" type="button" data-dismiss="modal">Cerrar</button>
+                                                </div>
+                                                <div id="botonesNomina" class="col-md-6 text-right">
+                                                    <a class="btn btn-default" href="/admin/ajax/nomina/planilla.php"><i class="fa fa-cloud-download"></i> Descargar planilla</a>
+                                                    <button class="btn btn-primary" type="submit" id="btnCargarNomina"><i class="fa fa-cloud-upload"></i> Cargar</button>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>

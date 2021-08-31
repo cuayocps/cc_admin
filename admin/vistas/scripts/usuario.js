@@ -12,7 +12,11 @@ function init() {
         guardaryeditar(e);
     })
 
-    $("#modalSubirNomina").on('bs.shown.modal', function () {
+    $("#modalSubirNomina").on('show.bs.modal', function () {
+        $('#grupoNomina').show()
+        $('#botonesNomina').show()
+        $('#resumenNomina').hide();
+        $('#cargandoNomina').hide();
         $('#formularioNomina').get(0).reset();
     });
 
@@ -32,6 +36,33 @@ function init() {
     $.post("../ajax/tipousuario.php?op=selectTipousuario", function (r) {
         $("#idtipousuario").html(r);
         $('#idtipousuario').selectpicker('refresh');
+    });
+
+    $("#formularioNomina").on('submit', function (event) {
+        event.preventDefault();
+        $('#cargandoNomina').show()
+        var formData = new FormData(this);
+        $.ajax({
+            url: $(this).attr('action'),
+            type: 'post',
+            data: formData,
+            dataType: 'json',
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                console.log(response);
+                var html = '';
+                var keys = Object.keys(response);
+                keys.forEach(function (key) {
+                    html += '<dt class="col-sm-4">' + key + '</dt>';
+                    html += '<dd class="col-sm-8">' + response[key] + '</dd>';
+                });
+                $('#grupoNomina').hide()
+                $('#botonesNomina').hide()
+                $('#cargandoNomina').hide()
+                $('#resumenNomina').html(html).show();
+            },
+        });
     });
 
 }

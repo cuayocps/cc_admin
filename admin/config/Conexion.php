@@ -16,6 +16,9 @@ if (!function_exists('ejecutarConsulta')) {
     {
         global $conexion;
         $query = $conexion->query($sql);
+        if (mysqli_error($conexion)) {
+            throw new exception($conexion->error, $conexion->errno);
+        }
         return $query;
     }
 
@@ -39,5 +42,9 @@ if (!function_exists('ejecutarConsulta')) {
         global $conexion;
         $str = mysqli_real_escape_string($conexion, trim($str));
         return htmlspecialchars($str);
+    }
+
+    function pr($v) {
+        echo '<pre>' . print_r($v, true) . '</pre>';
     }
 }
