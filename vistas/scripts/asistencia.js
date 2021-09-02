@@ -16,6 +16,7 @@ function init() {
         $('#camaraBody').empty();
     })
     $("#codigo_persona").focus();
+    geolocation()
 }
 
 function limpiar() {
@@ -25,27 +26,31 @@ function limpiar() {
 }
 
 function mostrarCamara() {
-    video = document.createElement('video');
-    video.style = "width: 100%";
-    video.width = 512;
-    video.height = 384;
-    video.autoplay = true;
-    $('#camaraBody').append(video)
-    $('#camara').modal('show')
-    navigator.mediaDevices.getUserMedia({ video: true, audio: false })
-        .then(function (stream) {
-            video.srcObject = stream;
-        })
-        .catch(function (error) {
-            alert(error);
-            return;
-        })
+    if (navigator.mediaDevices) {
+        video = document.createElement('video');
+        video.width = 320;
+        video.height = 240;
+        video.autoplay = true;
+        $('#camaraBody').append(video)
+        $('#camara').modal('show')
+        navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+            .then(function (stream) {
+                video.srcObject = stream;
+            })
+            .catch(function (error) {
+                alert(error);
+                return;
+            })
+    } else {
+        errorjs.innerHTML = 'Tu navegador no soporta la Camara en HTML5';
+        enviarFormulario();
+    }
 }
 
 function tomarFoto(video) {
     var canvas = document.createElement('canvas');
-    canvas.width = 512;
-    canvas.height = 384;
+    canvas.width = 320;
+    canvas.height = 240;
     canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
     var image_data_url = canvas.toDataURL('image/jpeg');
     $('#fotoBase64').val(image_data_url);
@@ -66,7 +71,6 @@ function enviarFormulario() {
         contentType: false,
         processData: false,
         success: function (registro) {
-            console.log(registro)
             if (registro.error) {
                 var html = '<div class="alert alert-danger">' + registro.error + '</div >';
             } else {
@@ -85,4 +89,37 @@ function enviarFormulario() {
     });
 }
 
+function geolocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function (objPosicion) {
+            $('#latitud').val(objPosicion.coords.longitude);
+            $('#longitud').val(objPosicion.coords.latitude);
+        }, function (objError) {
+            switch (objError.code) {
+                case objError.POSITION_UNAVAILABLE:
+                    error('La informaci&oacute;n de tu posici&oacute;n no es posible');
+                    break;
+                case objError.TIMEOUT:
+                    error("Tiempo de espera agotado");
+                    break;
+                case objError.PERMISSION_DENIED:
+                    error('Necesitas permitir tu localizaci&oacute;n');
+                    break;
+                case objError.UNKNOWN_ERROR:
+                    error('Error desconocido');
+                    break;
+            }
+        });
+    } else {
+        error('Tu navegador no soporta la Geolocalizaci&oacute;n en HTML5');
+    }
+}
+
+function error(msg) {
+    var errorjs = document.getElementById('errorjs');
+    errorjs.innerHTML = msg
+}
 init();
+
+
+
