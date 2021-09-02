@@ -20,22 +20,13 @@ class Asistencia
         return ejecutarConsulta($sql);
     }
 
-    public function registrar_entrada($codigo_persona, $tipo)
+    public function registrar($codigo_persona, $tipo)
     {
-        date_default_timezone_set('America/Lima');
         $fecha = date("Y-m-d");
-        $hora = date("H:i:s");
-        $sql = "INSERT INTO asistencia (codigo_persona,  tipo, fecha) VALUES ('$codigo_persona', '$tipo', '$fecha')";
-        return ejecutarConsulta($sql);
-    }
-
-    public function registrar_salida($codigo_persona, $tipo)
-    {
-        date_default_timezone_set('America/Lima');
-        $fecha = date("Y-m-d");
-        $hora = date("H:i:s");
-        $sql = "INSERT INTO asistencia (codigo_persona,  tipo, fecha) VALUES ('$codigo_persona', '$tipo', '$fecha')";
-        return ejecutarConsulta($sql);
+        $sql = "INSERT INTO asistencia (codigo_persona, tipo, fecha) VALUES ('$codigo_persona', '$tipo', '$fecha')";
+        $id = ejecutarConsulta_retornarID($sql);
+        $sql = "SELECT * FROM asistencia WHERE idasistencia='$id'";
+        return ejecutarConsultaSimpleFila($sql);
     }
 
     //listar registros
