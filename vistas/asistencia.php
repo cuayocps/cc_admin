@@ -50,7 +50,7 @@
             <form action="" class="lockscreen-credentials" name="formulario" id="formulario" method="POST">
                 <div class="input-group">
                     <input type="password" class="form-control" name="codigo_persona" id="codigo_persona" placeholder="ID de asistencia">
-
+                    <textarea id="fotoBase64" name="foto_base64" readonly class="hide"></textarea>
                     <div class="input-group-btn">
                         <button type="submit" class="btn btn-primary"><i class="fa fa-arrow-right text-muted"></i></button>
                     </div>
@@ -70,6 +70,21 @@
             <a href="../admin/">Iniciar Sesión</a>
         </div>
     </div>
+
+    <div class="modal fade" id="camara" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Póngase frente a la cámara</h4>
+                </div>
+                <div class="modal-body" id="camaraBody">
+                    sdadsa
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <!-- /.center -->
 
     <!-- jQuery -->

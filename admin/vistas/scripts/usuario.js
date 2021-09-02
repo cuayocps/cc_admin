@@ -50,7 +50,6 @@ function init() {
             contentType: false,
             processData: false,
             success: function (response) {
-                console.log(response);
                 var html = '';
                 var keys = Object.keys(response);
                 keys.forEach(function (key) {
