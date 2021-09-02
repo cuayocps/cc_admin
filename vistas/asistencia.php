@@ -78,7 +78,6 @@
                     <h4 class="modal-title">Póngase frente a la cámara</h4>
                 </div>
                 <div class="modal-body" id="camaraBody">
-                    sdadsa
                 </div>
             </div>
         </div>
