@@ -1,4 +1,4 @@
-var tabla;
+var video;
 
 //funcion que se ejecuta al inicio
 function init() {
@@ -7,9 +7,15 @@ function init() {
         $("#btnGuardar").prop("disabled", true);
         mostrarCamara();
     });
-    $('#camara').on('hidden.bs.modal', function () {
-        $('#camaraBody').empty()
+    $('#camara').on('shown.bs.modal', function () {
+        setTimeout(function () {
+            tomarFoto(video);
+        }, 3000)
     })
+    $('#camara').on('hidden.bs.modal', function () {
+        $('#camaraBody').empty();
+    })
+    $("#codigo_persona").focus();
 }
 
 function limpiar() {
@@ -19,7 +25,8 @@ function limpiar() {
 }
 
 function mostrarCamara() {
-    var video = document.createElement('video');;
+    video = document.createElement('video');
+    video.style = "width: 100%";
     video.width = 512;
     video.height = 384;
     video.autoplay = true;
@@ -33,9 +40,6 @@ function mostrarCamara() {
             alert(error);
             return;
         })
-    setTimeout(function () {
-        tomarFoto(video);
-    }, 2000)
 }
 
 function tomarFoto(video) {

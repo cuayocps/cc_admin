@@ -13,11 +13,12 @@ function init() {
         $("#idcliente").html(r);
         $('#idcliente').selectpicker('refresh');
     });
+    $.post("../ajax/asistencia.php?op=selectDepartamento", function (r) {
+        $("#iddepartamento").html(r);
+        $('#iddepartamento').selectpicker('refresh');
+    });
 
 }
-
-
-
 
 //funcion listar
 function listar() {
@@ -45,6 +46,7 @@ function listar() {
         "order": [[0, "desc"]]//ordenar (columna, orden)
     }).DataTable();
 }
+
 function listaru() {
     tabla = $('#tbllistadou').dataTable({
         "aProcessing": true,//activamos el procedimiento del datatable
@@ -71,12 +73,11 @@ function listaru() {
     }).DataTable();
 }
 
-
-
 function listar_asistencia() {
     var fecha_inicio = $("#fecha_inicio").val();
     var fecha_fin = $("#fecha_fin").val();
     var idcliente = $("#idcliente").val();
+    var iddepartamento = $("#iddepartamento").val();
 
     tabla = $('#tbllistado_asistencia').dataTable({
         "aProcessing": true,//activamos el procedimiento del datatable
@@ -91,7 +92,7 @@ function listar_asistencia() {
         "ajax":
         {
             url: '../ajax/asistencia.php?op=listar_asistencia',
-            data: { fecha_inicio: fecha_inicio, fecha_fin: fecha_fin, idcliente: idcliente },
+            data: { fecha_inicio: fecha_inicio, fecha_fin: fecha_fin, idcliente: idcliente, iddepartamento: iddepartamento },
             type: "get",
             dataType: "json",
             error: function (e) {
@@ -103,6 +104,7 @@ function listar_asistencia() {
         "order": [[0, "desc"]]//ordenar (columna, orden)
     }).DataTable();
 }
+
 function listar_asistenciau() {
     var fecha_inicio = $("#fecha_inicio").val();
     var fecha_fin = $("#fecha_fin").val();
@@ -132,7 +134,5 @@ function listar_asistenciau() {
         "order": [[0, "desc"]]//ordenar (columna, orden)
     }).DataTable();
 }
-
-
 
 init();
