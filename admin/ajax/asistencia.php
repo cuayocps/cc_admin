@@ -109,10 +109,10 @@ switch ($_GET["op"]) {
         $fecha_inicio = $_REQUEST["fecha_inicio"];
         $fecha_fin = $_REQUEST["fecha_fin"];
         $codigo_persona = $_REQUEST["idcliente"];
-        $rspta = $asistencia->listar_asistencia($fecha_inicio, $fecha_fin, $codigo_persona);
+        $iddepartamento = $_REQUEST["iddepartamento"];
+        $rspta = $asistencia->listar_asistencia($fecha_inicio, $fecha_fin, $codigo_persona, $iddepartamento);
         //declaramos un array
         $data = array();
-
 
         while ($reg = $rspta->fetch_object()) {
             $data[] = array(
@@ -168,8 +168,20 @@ switch ($_GET["op"]) {
 
         $rspta = $usuario->listar();
 
+        echo '<option></option>';
         while ($reg = $rspta->fetch_object()) {
-            echo '<option value=' . $reg->codigo_persona . '>' . $reg->nombre . ' ' . $reg->apellidos . '</option>';
+            echo "<option value=\"{$reg->codigo_persona}\">{$reg->nombre} {$reg->apellidos}</option>";
+        }
+        break;
+    case 'selectDepartamento':
+        require_once "../modelos/Departamento.php";
+        $departamento = new Departamento();
+
+        $rspta = $departamento->listar();
+
+        echo '<option></option>';
+        while ($reg = $rspta->fetch_object()) {
+            echo "<option value=\"{$reg->iddepartamento}\">{$reg->nombre}</option>";
         }
         break;
 }

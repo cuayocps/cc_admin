@@ -24,9 +24,16 @@ class Asistencia
         return ejecutarConsulta($sql);
     }
 
-    public function listar_asistencia($fecha_inicio, $fecha_fin, $codigo_persona)
+    public function listar_asistencia($fecha_inicio, $fecha_fin, $codigo_persona = null, $iddepartamento = null)
     {
-        $sql = "SELECT a.idasistencia,a.codigo_persona,a.fecha_hora,a.tipo,a.fecha,u.nombre,u.apellidos FROM asistencia a INNER JOIN usuarios u ON  a.codigo_persona=u.codigo_persona WHERE DATE(a.fecha)>='$fecha_inicio' AND DATE(a.fecha)<='$fecha_fin' AND a.codigo_persona='$codigo_persona'";
+        $options = '';
+        if ($codigo_persona) {
+            $options .= " AND a.codigo_persona='$codigo_persona'";
+        }
+        if ($iddepartamento) {
+            $options .= " AND u.iddepartamento='$iddepartamento'";
+        }
+        $sql = "SELECT a.idasistencia,a.codigo_persona,a.fecha_hora,a.tipo,a.fecha,u.nombre,u.apellidos FROM asistencia a INNER JOIN usuarios u ON  a.codigo_persona=u.codigo_persona WHERE DATE(a.fecha)>='$fecha_inicio' AND DATE(a.fecha)<='$fecha_fin' $options";
         return ejecutarConsulta($sql);
     }
 }
