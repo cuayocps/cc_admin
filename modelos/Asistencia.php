@@ -20,10 +20,10 @@ class Asistencia
         return ejecutarConsulta($sql);
     }
 
-    public function registrar($codigo_persona, $tipo)
+    public function registrar($codigo_persona, $tipo, $latitud, $longitud)
     {
         $fecha = date("Y-m-d");
-        $sql = "INSERT INTO asistencia (codigo_persona, tipo, fecha) VALUES ('$codigo_persona', '$tipo', '$fecha')";
+        $sql = "INSERT INTO asistencia (codigo_persona, tipo, fecha, latitud, longitud) VALUES ('$codigo_persona', '$tipo', '$fecha', '$latitud', '$longitud')";
         $id = ejecutarConsulta_retornarID($sql);
         $sql = "SELECT * FROM asistencia WHERE idasistencia='$id'";
         return ejecutarConsultaSimpleFila($sql);

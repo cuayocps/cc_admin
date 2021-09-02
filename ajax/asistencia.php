@@ -1,11 +1,14 @@
 <?php
 require_once dirname(__DIR__) . '/modelos/Asistencia.php';
+
 use Carbon\Carbon;
 
 $asistencia = new Asistencia();
 
 $codigo_persona = isset($_POST["codigo_persona"]) ? limpiarCadena($_POST["codigo_persona"]) : "";
 $iddepartamento = isset($_POST["iddepartamento"]) ? limpiarCadena($_POST["iddepartamento"]) : "";
+$latitud = isset($_POST["latitud"]) ? limpiarCadena($_POST["latitud"]) : "";
+$longitud = isset($_POST["longitud"]) ? limpiarCadena($_POST["longitud"]) : "";
 
 switch ($_GET['op']) {
     case 'registrar_asistencia':
@@ -24,11 +27,12 @@ switch ($_GET['op']) {
                 $tipo = 'Salida';
                 $errorTipo = 'la salida';
             }
-            $registro = $asistencia->registrar($codigo_persona, $tipo);
+            $registro = $asistencia->registrar($codigo_persona, $tipo, $latitud, $longitud);
             if (!$registro) {
                 $error = "No se pudo registrar {$errorTipo}";
-            } else {
-                $foto64 = str_replace('data:image/jpeg;base64,', '', $_POST["foto_base64"]);
+            }
+            if (!$error && !empty($_POST['foto_base64'])) {
+                $foto64 = str_replace('data:image/jpeg;base64,', '', $_POST['foto_base64']);
                 $foto = base64_decode($foto64);
                 $fecha = Carbon::parse($registro['fecha_hora']);
                 $month = $fecha->format('m');

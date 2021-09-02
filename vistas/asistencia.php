@@ -28,7 +28,8 @@
         //include '../ajax/asistencia.php'
         ?>
         <div name="movimientos" id="movimientos">
-        </div>
+            </div>
+            <div id="errorjs"></div>
 
 
 
@@ -51,6 +52,8 @@
                 <div class="input-group">
                     <input type="password" class="form-control" name="codigo_persona" id="codigo_persona" placeholder="ID de asistencia">
                     <textarea id="fotoBase64" name="foto_base64" readonly class="hide"></textarea>
+                    <input type="hidden" name="latitud" id="latitud">
+                    <input type="hidden" name="longitud" id="longitud">
                     <div class="input-group-btn">
                         <button type="submit" class="btn btn-primary"><i class="fa fa-arrow-right text-muted"></i></button>
                     </div>
