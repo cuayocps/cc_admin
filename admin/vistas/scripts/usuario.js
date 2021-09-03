@@ -30,6 +30,8 @@ function init() {
     $.post("../ajax/departamento.php?op=selectDepartamento", function (r) {
         $("#iddepartamento").html(r);
         $('#iddepartamento').selectpicker('refresh');
+        $("#Filtro__iddepartamento").html(r);
+        $('#Filtro__iddepartamento').selectpicker('refresh');
     });
 
     //cargamos los items al select tipousuario
@@ -125,6 +127,7 @@ function cancelarform_clave() {
 }
 //funcion listar
 function listar() {
+    var iddepartamento = $("#Filtro__iddepartamento").val();
     tabla = $('#tbllistado').dataTable({
         "aProcessing": true,//activamos el procedimiento del datatable
         "aServerSide": true,//paginacion y filrado realizados por el server
@@ -138,7 +141,8 @@ function listar() {
         "ajax":
         {
             url: '../ajax/usuario.php?op=listar',
-            type: "get",
+            data: { iddepartamento: iddepartamento },
+            type: "post",
             dataType: "json",
             error: function (e) {
                 console.log(e.responseText);
@@ -161,7 +165,6 @@ function guardaryeditar(e) {
         data: formData,
         contentType: false,
         processData: false,
-
         success: function (datos) {
             bootbox.alert(datos);
             mostrarform(false);
