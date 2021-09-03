@@ -26,6 +26,15 @@ if (!isset($_SESSION['nombre'])) {
                         <!--box-header-->
                         <!--centro-->
                         <div class="panel-body table-responsive" id="listadoregistros">
+                            <div class="form-group row">
+                                <label class="col-xs-4 col-sm-2 control-label">Departamento</label>
+                                <div class="col-xs-8 col-sm-6 col-md-4 col-xl-3">
+                                    <select name="iddepartamento" id="Filtro__iddepartamento" class="form-control selectpicker" data-live-search="true"></select>
+                                </div>
+                                <div class="col-xs-12 col-sm-2">
+                                    <button class="btn btn-info" onclick="listar();">Filtrar</button>
+                                </div>
+                            </div>
                             <table id="tbllistado" class="table table-striped table-bordered table-condensed table-hover">
                                 <thead>
                                     <th>Opciones</th>
@@ -36,6 +45,7 @@ if (!isset($_SESSION['nombre'])) {
                                     <th>Foto</th>
                                     <th>Fecha/Registro</th>
                                     <th>Estado</th>
+                                    <th>Departamento</th>
                                 </thead>
                                 <tbody>
                                 </tbody>
@@ -48,6 +58,7 @@ if (!isset($_SESSION['nombre'])) {
                                     <th>Foto</th>
                                     <th>Fecha/Registro</th>
                                     <th>Estado</th>
+                                    <th>Departamento</th>
                                 </tfoot>
                             </table>
                         </div>
@@ -166,7 +177,7 @@ if (!isset($_SESSION['nombre'])) {
                                                     <button class="btn btn-default" type="button" data-dismiss="modal">Cerrar</button>
                                                 </div>
                                                 <div id="botonesNomina" class="col-md-6 text-right">
-                                                    <a class="btn btn-default" href="/admin/ajax/nomina/planilla.php"><i class="fa fa-cloud-download"></i> Descargar planilla</a>
+                                                    <a class="btn btn-default" href="../ajax/nomina/planilla.php"><i class="fa fa-cloud-download"></i> Descargar planilla</a>
                                                     <button class="btn btn-primary" type="submit" id="btnCargarNomina"><i class="fa fa-cloud-upload"></i> Cargar</button>
                                                 </div>
                                             </div>

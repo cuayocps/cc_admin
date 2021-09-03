@@ -53,9 +53,17 @@ class Usuario
     }
 
     //listar registros
-    public function listar()
+    public function listar($filters)
     {
-        $sql = "SELECT * FROM usuarios";
+        $where = '';
+        if (!empty(array_filter($filters))) {
+            $and = [];
+            foreach ($filters as $field => $value) {
+                $and[] = "usuarios.{$field} = '$value'";
+            }
+            $where = 'WHERE ' . implode(' AND ', $and);
+        }
+        $sql = "SELECT usuarios.*, departamento.nombre as departamento FROM usuarios INNER JOIN departamento ON departamento.iddepartamento = usuarios.iddepartamento {$where}";
         return ejecutarConsulta($sql);
     }
 
