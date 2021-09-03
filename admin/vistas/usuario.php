@@ -166,7 +166,7 @@ if (!isset($_SESSION['nombre'])) {
                                                     <button class="btn btn-default" type="button" data-dismiss="modal">Cerrar</button>
                                                 </div>
                                                 <div id="botonesNomina" class="col-md-6 text-right">
-                                                    <a class="btn btn-default" href="/admin/ajax/nomina/planilla.php"><i class="fa fa-cloud-download"></i> Descargar planilla</a>
+                                                    <a class="btn btn-default" href="../ajax/nomina/planilla.php"><i class="fa fa-cloud-download"></i> Descargar planilla</a>
                                                     <button class="btn btn-primary" type="submit" id="btnCargarNomina"><i class="fa fa-cloud-upload"></i> Cargar</button>
                                                 </div>
                                             </div>
