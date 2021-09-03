@@ -24,21 +24,23 @@ foreach($columns as $col => $title) {
     $sheet->setCellValue("{$cols[$col]}1", $title);
 }
 
-$tipousuario = new Tipousuario();
-$tipos = $tipousuario->select()->fetch_assoc();
 $sheet_2 = $spreadsheet->createSheet();
 $sheet_2->setTitle('Tipos de Usuario');
-foreach($tipos as $i => $tipo) {
-    $col = $i + 1;
+$tipousuario = new Tipousuario();
+$tipos = $tipousuario->select();
+$col = 0;
+while ($tipo = $tipos->fetch_assoc()) {
+    ++$col;
     $sheet_2->setCellValue("a{$col}", "{$tipo['idtipousuario']}:{$tipo['nombre']}");
 }
 
-$departamento = new Departamento();
-$departamentos = $departamento->select()->fetch_assoc();
 $sheet_3 = $spreadsheet->createSheet();
 $sheet_3->setTitle('Departamentos');
-foreach($departamentos as $i => $dpto) {
-    $col = $i + 1;
+$departamento = new Departamento();
+$departamentos = $departamento->select();
+$col = 0;
+while ($dpto = $departamentos->fetch_assoc()) {
+    ++$col;
     $sheet_3->setCellValue("a{$col}", "{$dpto['iddepartamento']}:{$dpto['nombre']}");
 }
 

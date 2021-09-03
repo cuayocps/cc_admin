@@ -1,6 +1,6 @@
   <footer class="main-footer">
       <div class="pull-right hidden-xs">
-          <b>Version</b> 0.6.1
+          <b>Version</b> 0.6.2
       </div>
       <strong>Copyright &copy; 2019-2021 <a target="_blank" href="http://especialistasti.cl">Especialistas TI</a></strong>
       Todo los derechos reservados.
