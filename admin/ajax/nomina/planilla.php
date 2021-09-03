@@ -25,7 +25,7 @@ foreach($columns as $col => $title) {
 }
 
 $tipousuario = new Tipousuario();
-$tipos = $tipousuario->select()->fetch_all(MYSQLI_ASSOC);
+$tipos = $tipousuario->select()->fetch_assoc();
 $sheet_2 = $spreadsheet->createSheet();
 $sheet_2->setTitle('Tipos de Usuario');
 foreach($tipos as $i => $tipo) {
@@ -34,7 +34,7 @@ foreach($tipos as $i => $tipo) {
 }
 
 $departamento = new Departamento();
-$departamentos = $departamento->select()->fetch_all(MYSQLI_ASSOC);
+$departamentos = $departamento->select()->fetch_assoc();
 $sheet_3 = $spreadsheet->createSheet();
 $sheet_3->setTitle('Departamentos');
 foreach($departamentos as $i => $dpto) {
