@@ -1,9 +1,9 @@
-  <footer class="main-footer">
+<footer class="main-footer">
       <div class="pull-right hidden-xs">
-          <b>Version</b> 0.1.2
+          <b>Version</b> 0.6.1
       </div>
-      <strong>Copyright &copy; 2019-2020 <a target="_blank" href="https://www.compartiendocodigos.net">CompartiendoCódigos</a></strong> Todo los derechos
-      reservados.
+      <strong>Copyright &copy; 2019-2021 <a target="_blank" href="http://especialistasti.cl">Especialistas TI</a></strong>
+      Todo los derechos reservados.
   </footer>
 
   <!-- jQuery 3 -->
