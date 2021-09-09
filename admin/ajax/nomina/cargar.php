@@ -38,7 +38,7 @@ foreach ($nomina as $datos) {
     $imagen = 'default.jpg';
     $idmensaje = 0;
 
-    if (!($usuario->buscar(compact('login')) ?: $usuario->buscar(compact('codigo_persona')))) {
+    if ($usuario->buscar(compact('login') || $usuario->buscar(compact('codigo_persona')))) {
         ++$existentes;
         continue;
     }
@@ -49,7 +49,7 @@ foreach ($nomina as $datos) {
             throw new Exception("No se pudo agregar el usuario {$login}");
         }
         ++$creados;
-    } catch(Exception $e) {
+    } catch (Exception $e) {
         ++$fallidos;
     }
 }
