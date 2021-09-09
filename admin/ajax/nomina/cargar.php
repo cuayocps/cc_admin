@@ -38,7 +38,7 @@ foreach ($nomina as $datos) {
     $imagen = 'default.jpg';
     $idmensaje = 0;
 
-    if ($usuario->buscar(compact('login') || $usuario->buscar(compact('codigo_persona')))) {
+    if ($usuario->buscar(compact('login')) || $usuario->buscar(compact('codigo_persona'))) {
         ++$existentes;
         continue;
     }
