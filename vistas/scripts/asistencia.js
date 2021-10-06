@@ -92,8 +92,8 @@ function enviarFormulario() {
 function geolocation() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function (objPosicion) {
-            $('#latitud').val(objPosicion.coords.longitude);
-            $('#longitud').val(objPosicion.coords.latitude);
+            $('#latitud').val(objPosicion.coords.latitude);
+            $('#longitud').val(objPosicion.coords.longitude);
         }, function (objError) {
             switch (objError.code) {
                 case objError.POSITION_UNAVAILABLE:
@@ -109,7 +109,7 @@ function geolocation() {
                     error('Error desconocido');
                     break;
             }
-        });
+        }, {enableHighAccuracy:true});
     } else {
         error('Tu navegador no soporta la Geolocalizaci&oacute;n en HTML5');
     }

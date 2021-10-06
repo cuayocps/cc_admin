@@ -117,10 +117,12 @@ switch ($_GET["op"]) {
         while ($reg = $rspta->fetch_object()) {
             $data[] = array(
                 "0" => $reg->fecha,
-                "1" => $reg->nombre,
+                "1" => "{$reg->nombre} {$reg->apellidos}",
                 "2" => $reg->tipo,
                 "3" => $reg->fecha_hora,
-                "4" => $reg->codigo_persona
+                "4" => $reg->codigo_persona,
+                "5" => "<a href=\"https://www.google.com/maps/search/?api=1&query={$reg->latitud},{$reg->longitud}\">Mapa</a>"
+
             );
         }
 
