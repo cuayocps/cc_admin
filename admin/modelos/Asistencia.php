@@ -33,7 +33,20 @@ class Asistencia
         if ($iddepartamento) {
             $options .= " AND u.iddepartamento='$iddepartamento'";
         }
-        $sql = "SELECT a.idasistencia,a.codigo_persona,a.fecha_hora,a.tipo,a.fecha,u.nombre,u.apellidos FROM asistencia a INNER JOIN usuarios u ON  a.codigo_persona=u.codigo_persona WHERE DATE(a.fecha)>='$fecha_inicio' AND DATE(a.fecha)<='$fecha_fin' $options";
+        $sql = "SELECT a.idasistencia,
+                    a.codigo_persona,
+                    a.fecha_hora,
+                    a.tipo,
+                    a.fecha,
+                    a.latitud,
+                    a.longitud,
+                    u.nombre,
+                    u.apellidos
+                FROM asistencia a
+                INNER JOIN usuarios u
+                    ON  a.codigo_persona = u.codigo_persona
+                WHERE DATE(a.fecha) >= '$fecha_inicio'
+                    AND DATE(a.fecha) <= '$fecha_fin' $options";
         return ejecutarConsulta($sql);
     }
 }

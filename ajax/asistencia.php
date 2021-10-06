@@ -37,7 +37,7 @@ switch ($_GET['op']) {
                 $fecha = Carbon::parse($registro['fecha_hora']);
                 $month = $fecha->format('m');
                 $folder = dirname(__DIR__) . "/files/registro_asistencia/{$codigo_persona}/{$fecha->year}/{$month}";
-                mkdir($folder, 0666, true);
+                mkdir($folder, 0777, true);
                 $dayTime = $fecha->format('d-His');
                 $path = "$folder/{$dayTime}.jpg";
                 file_put_contents($path, $foto);
