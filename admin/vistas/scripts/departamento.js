@@ -2,40 +2,25 @@ var tabla;
 
 //funcion que se ejecuta al inicio
 function init() {
-    mostrarform(false);
-    listar();
-
-    $("#formulario").on("submit", function (e) {
-        guardaryeditar(e);
-    })
+  listar();
+  $("#formularioregistros").on("submit", "form", function (e) {
+    guardaryeditar(e);
+  })
 }
 
-//funcion limpiar
-function limpiar() {
-    $("#iddepartamento").val("");
-    $("#nombre").val("");
-    $("#descripcion").val("");
+//funcion cancelarform
+function cancelarform() {
+  $("#listadoregistros").show();
+  $("#btnagregar").show();
+  $("#formularioregistros").empty();
 }
 
 //funcion mostrar formulario
-function mostrarform(flag) {
-    limpiar();
-    if (flag) {
-        $("#listadoregistros").hide();
-        $("#formularioregistros").show();
-        $("#btnGuardar").prop("disabled", false);
-        $("#btnagregar").hide();
-    } else {
-        $("#listadoregistros").show();
-        $("#formularioregistros").hide();
-        $("#btnagregar").show();
-    }
-}
-
-//cancelar form
-function cancelarform() {
-    limpiar();
-    mostrarform(false);
+function mostrarform(html) {
+  $("#listadoregistros").hide();
+  $("#btnagregar").hide();
+  console.log(html);
+  $("#formularioregistros").html(html);
 }
 
 //funcion listar
@@ -64,6 +49,7 @@ function listar() {
         "order": [[0, "desc"]]//ordenar (columna, orden)
     }).DataTable();
 }
+
 //funcion para guardaryeditar
 function guardaryeditar(e) {
     e.preventDefault();//no se activara la accion predeterminada
@@ -79,24 +65,32 @@ function guardaryeditar(e) {
 
         success: function (datos) {
             bootbox.alert(datos);
-            mostrarform(false);
             tabla.ajax.reload();
+            cancelarform();
         }
     });
 
-    limpiar();
+    cancelarform();
+}
+
+function agregar() {
+    var departamento = {
+      iddepartamento: null,
+      nombre: '',
+      descripcion:''
+    };
+    const editar = Template.load('departamento/edit.tpl');
+    const html = editar(departamento);
+    mostrarform(html);
 }
 
 function mostrar(iddepartamento) {
     $.post("../ajax/departamento.php?op=mostrar", { iddepartamento: iddepartamento },
-        function (data, status) {
-            data = JSON.parse(data);
-            mostrarform(true);
-
-            $("#nombre").val(data.nombre);
-            $("#descripcion").val(data.descripcion);
-            $("#iddepartamento").val(data.iddepartamento);
-        })
+      function (departamento) {
+        const editar = Template.load('departamento/edit.tpl');
+        const html = editar(departamento);
+        mostrarform(html);
+      }, 'json')
 }
 
 
