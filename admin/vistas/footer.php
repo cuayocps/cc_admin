@@ -26,6 +26,17 @@
   <script src="../public/js/bootbox.min.js"></script>
   <script src="../public/js/bootstrap-select.min.js"></script>
   <script src="../public/js/filestyle.min.js"> </script>
+  <script src="../public/js/lodash.min.js"></script>
+  <script src="../public/js/helpers/template.js"></script>
+  <?php
+      $adminDir = preg_replace("/^\\{$_SERVER['DOCUMENT_ROOT']}/", '', dirname(__DIR__));
+    ?>
+
+  <script type="text/javascript">
+    Template.setLocation('<?= $adminDir ?>/public/templates');
+    Template.cache = false;
+  </script>
+
 
   </body>
 
