@@ -27,7 +27,7 @@ if (!function_exists('ejecutarConsulta')) {
         global $conexion;
 
         $query = $conexion->query($sql);
-        $row = $query->fetch_assoc();
+        $row = $query ? $query->fetch_assoc() : null;
         return $row;
     }
     function ejecutarConsulta_retornarID($sql)
@@ -46,5 +46,14 @@ if (!function_exists('ejecutarConsulta')) {
 
     function pr($v) {
         echo '<pre>' . print_r($v, true) . '</pre>';
+    }
+
+    function consultaEnArray(mysqli_result $query)
+    {
+      $data = [];
+      while($row = $query->fetch_assoc()) {
+        $data[] = $row;
+      }
+      return $data;
     }
 }
