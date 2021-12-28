@@ -14,7 +14,7 @@ class solicitud
     public function insertar($iddestino, $idusuario, $fecha_hora, $numcon, $idarticulo, $cantidad)
     {
 
-        date_default_timezone_set('America/Mexico_City');
+        date_default_timezone_set(TIMEZONE);
         $fechacreada = date('Y-m-d H:i:s');
 
         $sql = "INSERT INTO solicitud (iddestino,idusuario,num_comprobante,fecha_hora,estado) VALUES ('$iddestino','$idusuario','$numcon','$fechacreada','Pendiente')";
@@ -99,7 +99,7 @@ class solicitud
         }
 
 
-        date_default_timezone_set('America/Mexico_City');
+        date_default_timezone_set(TIMEZONE);
         $fechacreada = date('Y-m-d H:i:s');
 
         $sql = "UPDATE detalle_solicitud SET estado='$estado',fecha_hora='$fechacreada',idusuario='$sesion',comentario='$comentario' WHERE iddetalle_solicitud='$idsolicitud'";
