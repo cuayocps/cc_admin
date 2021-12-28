@@ -1,6 +1,7 @@
 <?php
 
 require_once dirname(__DIR__) . '/config/Conexion.php';
+date_default_timezone_set(TIMEZONE);
 
 class Schedule
 {
@@ -33,16 +34,17 @@ class Schedule
   //metodo insertar regiustro
   public function insertar($departamento_id, $dia, $hora_inicio, $hora_final)
   {
-    date_default_timezone_set(TIMEZONE);
     $fecha_creacion = date('Y-m-d H:i:s');
-    $sql = "INSERT INTO {$this->table} SET departamento_id = '$departamento_id', dia = '$dia', hora_inicio = '$hora_inicio', hora_final = '$hora_final', fecha_creacion = '$fecha_creacion'";
+    $sql = "INSERT INTO {$this->table}
+      SET departamento_id = '$departamento_id', dia = '$dia', hora_inicio = '$hora_inicio', hora_final = '$hora_final', fecha_creacion = '$fecha_creacion'";
     return ejecutarConsulta($sql);
   }
 
   public function editar($id, $departamento_id, $dia, $hora_inicio, $hora_final)
   {
+    $fecha_creacion = date('Y-m-d H:i:s');
     $sql = "UPDATE {$this->table}
-      SET departamento_id = '$departamento_id', dia = '$dia', hora_inicio = '$hora_inicio', hora_final = '$hora_final'
+      SET departamento_id = '$departamento_id', dia = '$dia', hora_inicio = '$hora_inicio', hora_final = '$hora_final', fecha_creacion = '$fecha_creacion'
       WHERE id='$id'";
     return ejecutarConsulta($sql);
   }
