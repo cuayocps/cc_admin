@@ -1,9 +1,9 @@
-var tabla;
+var tabla, schedules;
 
 //funcion que se ejecuta al inicio
 function init() {
   listar();
-  $("#formularioregistros").on("submit", "form", function (e) {
+  $("#formularioregistros").on("submit", "#Departamento__form", function (e) {
     guardaryeditar(e);
   })
 }
@@ -13,14 +13,22 @@ function cancelarform() {
   $("#listadoregistros").show();
   $("#btnagregar").show();
   $("#formularioregistros").empty();
+  $('#formularioregistros').hide()
 }
 
 //funcion mostrar formulario
 function mostrarform(html) {
   $("#listadoregistros").hide();
   $("#btnagregar").hide();
-  console.log(html);
   $("#formularioregistros").html(html);
+  $('#Schedule__time_from').timepicker(timepickerConfig);
+  $('#Schedule__time_to').timepicker(timepickerConfig);
+  $('#Schedule__form').on('submit', function(e) {
+    e.preventDefault();
+    addSchedule();
+  })
+  initScheduleTable();
+  $('#formularioregistros').show()
 }
 
 //funcion listar
@@ -115,6 +123,62 @@ function activar(iddepartamento) {
             });
         }
     })
+}
+
+function initScheduleTable() {
+  schedules = $('#schedules').dataTable({
+    aProcessing: true,
+    aServerSide: true,
+    dom: 'frt',
+    ajax: {
+      url: '../ajax/schedule.php?op=listar',
+      type: 'get',
+      dataType: 'json',
+      error: function (e) {
+          console.log(e.responseText);
+      }
+    },
+    bDestroy: true,
+    iDisplayLength: 10,
+    columns: [
+      {
+        data: function (row) {
+          return '<button class="btn btn-danger btn-xs delete"><i class="fa fa-trash"></i></button>'
+        }
+      },
+      {
+        data: 'dia',
+        render: function (dia) {
+          return days[dia];
+        }
+      },
+      { data: 'hora_inicio' },
+      { data: 'hora_final' },
+      { data: 'fecha_creacion' },
+    ]
+  }).DataTable();
+  $('#schedules').on('click', '.btn.delete', function () {
+    var $tr = $(this).closest('tr');
+    var row = schedules.row($tr).data();
+    deleteSchedule(row)
+  })
+}
+
+function addSchedule() {
+  $('#Schedule__add').prop('disabled', true);
+  var scheduleData = $("#Schedule__form").serialize();
+  $.post('../ajax/schedule.php?op=agregar', scheduleData, function (r) {
+    schedules.ajax.reload();
+    $('#Schedule__add').prop('disabled', false);
+  }, 'json')
+}
+
+function deleteSchedule(row) {
+  console.log(row)
+  var scheduleData = {id: row.id};
+  $.post('../ajax/schedule.php?op=eliminar', scheduleData, function (r) {
+    schedules.ajax.reload();
+  }, 'json')
 }
 
 init();

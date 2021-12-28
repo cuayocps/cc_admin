@@ -41,8 +41,7 @@ if (!isset($_SESSION['nombre'])) {
                                 </tfoot>
                             </table>
                         </div>
-                        <div class="panel-body" style="height: 400px;" id="formularioregistros"></div>
-
+                        <div class="panel-body" style="min-height: 400px; display:none" id="formularioregistros"></div>
                         <!--fin centro-->
                     </div>
                 </div>
@@ -56,7 +55,12 @@ if (!isset($_SESSION['nombre'])) {
 
 
     require 'footer.php';
+    require_once "../modelos/Schedule.php";
+
     ?>
+    <script type="text/javascript">
+      var days = <?= json_encode(Schedule::DAYS) ?>;
+    </script>
     <script src="scripts/departamento.js"></script>
 <?php
 }
