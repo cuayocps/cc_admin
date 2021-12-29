@@ -17,7 +17,8 @@ class ScheduleController
 
   public function listar()
   {
-    $data = $this->schedule->listar();
+    $departamento_id = limpiarCadena($_GET['iddepartamento']);
+    $data = $this->schedule->listar($departamento_id);
     $indiceDia = array_combine(Schedule::DAYS_OF_WEEK, array_keys(Schedule::DAYS_OF_WEEK));
     foreach ($data as &$row) {
       $row['dia'] = $indiceDia[$row['dia']];
@@ -38,12 +39,13 @@ class ScheduleController
     $dia_fin = $_POST['date_to'] != '' ? limpiarCadena($_POST['date_to']) : limpiarCadena($_POST['date_from']);
     $hora_inicio = !empty($_POST['time_from']) ? limpiarCadena($_POST['time_from']) : '';
     $hora_final = !empty($_POST['time_to']) ? limpiarCadena($_POST['time_to']) : '';
+    $tolerancia = !empty($_POST['tolerance']) ? limpiarCadena($_POST['tolerance']) : '';
     for ($d = $dia_inicio; $d <= $dia_fin; ++$d) {
       $dia = Schedule::DAYS_OF_WEEK[$d];
       if ($id = $this->schedule->id($departamento_id, $dia)) {
-        $this->schedule->editar($id, $departamento_id, $dia, $hora_inicio, $hora_final);
+        $this->schedule->editar($id, $departamento_id, $dia, $hora_inicio, $hora_final, $tolerancia);
       } else {
-        $this->schedule->insertar($departamento_id, $dia, $hora_inicio, $hora_final);
+        $this->schedule->insertar($departamento_id, $dia, $hora_inicio, $hora_final, $tolerancia);
       }
     }
     return ['success' => true];

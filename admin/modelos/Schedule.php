@@ -32,19 +32,29 @@ class Schedule
   }
 
   //metodo insertar regiustro
-  public function insertar($departamento_id, $dia, $hora_inicio, $hora_final)
+  public function insertar($departamento_id, $dia, $hora_inicio, $hora_final, $tolerancia)
   {
     $fecha_creacion = date('Y-m-d H:i:s');
     $sql = "INSERT INTO {$this->table}
-      SET departamento_id = '$departamento_id', dia = '$dia', hora_inicio = '$hora_inicio', hora_final = '$hora_final', fecha_creacion = '$fecha_creacion'";
+      SET departamento_id = '$departamento_id',
+        dia = '$dia',
+        hora_inicio = '$hora_inicio',
+        hora_final = '$hora_final',
+        fecha_creacion = '$fecha_creacion',
+        tolerancia = '$tolerancia'";
     return ejecutarConsulta($sql);
   }
 
-  public function editar($id, $departamento_id, $dia, $hora_inicio, $hora_final)
+  public function editar($id, $departamento_id, $dia, $hora_inicio, $hora_final, $tolerancia)
   {
     $fecha_creacion = date('Y-m-d H:i:s');
     $sql = "UPDATE {$this->table}
-      SET departamento_id = '$departamento_id', dia = '$dia', hora_inicio = '$hora_inicio', hora_final = '$hora_final', fecha_creacion = '$fecha_creacion'
+      SET departamento_id = '$departamento_id',
+        dia = '$dia',
+        hora_inicio = '$hora_inicio',
+        hora_final = '$hora_final',
+        fecha_creacion = '$fecha_creacion',
+        tolerancia = '$tolerancia'
       WHERE id='$id'";
     return ejecutarConsulta($sql);
   }
@@ -55,28 +65,17 @@ class Schedule
   }
 
   //metodo para mostrar registros
-  public function mostrar($departamento_id)
+  public function mostrar($id)
   {
-    $sql = "SELECT * FROM {$this->table} WHERE departamento_id='$departamento_id'";
+    $sql = "SELECT * FROM {$this->table} WHERE id='$id'";
     return ejecutarConsultaSimpleFila($sql);
   }
 
   //listar registros
-  public function listar()
+  public function listar($departamento_id)
   {
-    $sql = "SELECT * FROM {$this->table}";
+    $sql = "SELECT * FROM {$this->table} where departamento_id = '$departamento_id'";
     return consultaEnArray(ejecutarConsulta($sql));
   }
-  //listar y mostrar en selct
-  public function select()
-  {
-    $sql = "SELECT * FROM {$this->table}";
-    return ejecutarConsulta($sql);
-  }
 
-  public function regresaRolDepartamento($departamento)
-  {
-    $sql = "SELECT nombre FROM {$this->table} WHERE departamento_id='$departamento'";
-    return ejecutarConsulta($sql);
-  }
 }

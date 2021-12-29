@@ -131,7 +131,7 @@ function initScheduleTable() {
     aServerSide: true,
     dom: 'frt',
     ajax: {
-      url: '../ajax/schedule.php?op=listar',
+      url: '../ajax/schedule.php?op=listar&iddepartamento=' + $('#iddepartamento').val(),
       type: 'get',
       dataType: 'json',
       error: function (e) {
@@ -154,6 +154,12 @@ function initScheduleTable() {
       },
       { data: 'hora_inicio' },
       { data: 'hora_final' },
+      {
+        data: 'tolerancia',
+        render: function (tolerancia) {
+          return tolerancia + ' minuto' + (tolerancia == 1 ? '' : 's')
+        }
+      },
       { data: 'fecha_creacion' },
     ]
   }).DataTable();
