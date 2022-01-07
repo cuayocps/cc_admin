@@ -21,24 +21,42 @@
 
 <h4>Horario</h4>
 <form id="Schedule__form" class="form-inline">
+
   <input type="hidden" name="iddepartamento" value="<%= iddepartamento %>">
   <%= Html.select('date_from', days, null, {
       id: 'Schedule__date_from'
     }) %>
-  <%= Html.select('date_to', days, null, {
+
+  <div class="form-group">
+    <label for="Schedule__time_from">a</label>
+    <%= Html.select('date_to', _.omit(Object.assign({}, days), 0), null, {
       id: 'Schedule__date_to',
       empty: true
     }) %>
-  <div class="input-group bootstrap-timepicker timepicker">
-    <input class="form-control" type="text" name="time_from" id="Schedule__time_from" placeholder="00:00">
   </div>
-  <div class="input-group bootstrap-timepicker timepicker">
-    <input class="form-control" type="text" name="time_to" id="Schedule__time_to" placeholder="00:00">
+
+  <div class="form-group">
+    <label for="Schedule__time_from">, de</label>
+    <div class="input-group bootstrap-timepicker timepicker">
+      <input class="form-control" type="text" name="time_from" id="Schedule__time_from" placeholder="00:00" size="3">
+    </div>
   </div>
-  <div class="input-group">
-    <input type="text" class="form-control" name="tolerance" id="Schedule__tolerance" placeholder="0" aria-describedby="basic-addon2" size="3" maxlength="2">
-    <label for="Schedule__tolerance" class="input-group-addon" id="basic-addon2" style="background-color: #e5e5e5;">minuto(s)</label>
+
+  <div class="form-group">
+    <label for="Schedule__time_from">a</label>
+    <div class="input-group bootstrap-timepicker timepicker">
+      <input class="form-control" type="text" name="time_to" id="Schedule__time_to" placeholder="00:00" size="3">
+    </div>
   </div>
+
+  <div class="form-group">
+    <label for="Schedule__time_from">tolerancia</label>
+    <div class="input-group">
+      <input type="text" class="form-control" name="tolerance" id="Schedule__tolerance" placeholder="0" aria-describedby="basic-addon2" size="3" maxlength="2">
+      <label for="Schedule__tolerance" class="input-group-addon" id="basic-addon2" style="background-color: #e5e5e5;">minuto(s)</label>
+    </div>
+  </div>
+
   <button class="btn btn-success btn-md" id="Schedule__add"><i class="fa fa-clock-o"></i> Agregar</button>
 </form>
 <hr>

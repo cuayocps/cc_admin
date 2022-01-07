@@ -53,9 +53,8 @@ if (!isset($_SESSION['nombre'])) {
     </div>
     <?php
 
-
     require 'footer.php';
-    require_once "../modelos/Schedule.php";
+    require_once dirname(__DIR__) . '/modelos/Schedule.php';
 
     ?>
     <script type="text/javascript">
