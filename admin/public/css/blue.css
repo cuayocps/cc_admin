@@ -60,3 +60,7 @@
         background-size: 240px 24px;
     }
 }
+
+.form-row {
+  margin-bottom: 1rem;
+}

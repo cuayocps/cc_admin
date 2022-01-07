@@ -70,7 +70,7 @@
 
         </div>
         <div class="lockscreen-footer text-center">
-            <a href="../admin/">Iniciar Sesión</a>
+            <a href="../admin/">Iniciar Sesión</a> <!-- - <a href="../vistas/reporte.php">Reporte de Horas</a> -->
         </div>
     </div>
 

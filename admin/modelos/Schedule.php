@@ -24,19 +24,19 @@ class Schedule
   {
   }
 
-  public function id($departamento_id, $dia)
+  public function id($id_departamento, $dia)
   {
-    $sql = "SELECT id FROM {$this->table} WHERE departamento_id='$departamento_id' AND dia='$dia'";
+    $sql = "SELECT id FROM {$this->table} WHERE id_departamento='$id_departamento' AND dia='$dia'";
     $schedule = ejecutarConsultaSimpleFila($sql);
     return empty($schedule) ? null : $schedule['id'];
   }
 
   //metodo insertar regiustro
-  public function insertar($departamento_id, $dia, $hora_inicio, $hora_final, $tolerancia)
+  public function insertar($id_departamento, $dia, $hora_inicio, $hora_final, $tolerancia)
   {
     $fecha_creacion = date('Y-m-d H:i:s');
     $sql = "INSERT INTO {$this->table}
-      SET departamento_id = '$departamento_id',
+      SET id_departamento = '$id_departamento',
         dia = '$dia',
         hora_inicio = '$hora_inicio',
         hora_final = '$hora_final',
@@ -45,11 +45,11 @@ class Schedule
     return ejecutarConsulta($sql);
   }
 
-  public function editar($id, $departamento_id, $dia, $hora_inicio, $hora_final, $tolerancia)
+  public function editar($id, $id_departamento, $dia, $hora_inicio, $hora_final, $tolerancia)
   {
     $fecha_creacion = date('Y-m-d H:i:s');
     $sql = "UPDATE {$this->table}
-      SET departamento_id = '$departamento_id',
+      SET id_departamento = '$id_departamento',
         dia = '$dia',
         hora_inicio = '$hora_inicio',
         hora_final = '$hora_final',
@@ -72,10 +72,9 @@ class Schedule
   }
 
   //listar registros
-  public function listar($departamento_id)
+  public function listar($id_departamento)
   {
-    $sql = "SELECT * FROM {$this->table} where departamento_id = '$departamento_id'";
+    $sql = "SELECT * FROM {$this->table} where id_departamento = '$id_departamento'";
     return consultaEnArray(ejecutarConsulta($sql));
   }
-
 }
