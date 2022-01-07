@@ -29,6 +29,7 @@
      <link href="../public/datatables/responsive.dataTables.min.css" rel="stylesheet" />
 
      <link rel="stylesheet" type="text/css" href="../public/css/bootstrap-select.min.css">
+     <link rel="stylesheet" type="text/css" href="../public/css/bootstrap-timepicker.min.css">
 
  </head>
 

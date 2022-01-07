@@ -14,7 +14,7 @@ class Departamento
     //metodo insertar regiustro
     public function insertar($nombre, $descripcion, $idusuario)
     {
-        date_default_timezone_set('America/Mexico_City');
+        date_default_timezone_set(TIMEZONE);
         $fechacreada = date('Y-m-d H:i:s');
         $sql = "INSERT INTO departamento (nombre,descripcion,fechacreada,idusuario) VALUES ('$nombre','$descripcion','$fechacreada','$idusuario')";
         return ejecutarConsulta($sql);
@@ -23,7 +23,7 @@ class Departamento
     public function editar($iddepartamento, $nombre, $descripcion, $idusuario)
     {
         $sql = "UPDATE departamento SET nombre='$nombre',descripcion='$descripcion',idusuario='$idusuario'
-	WHERE iddepartamento='$iddepartamento'";
+          WHERE iddepartamento='$iddepartamento'";
         return ejecutarConsulta($sql);
     }
     public function desactivar($iddepartamento)
@@ -38,10 +38,11 @@ class Departamento
     }
 
     //metodo para mostrar registros
-    public function mostrar($iddepartamento)
+    public function mostrar($iddepartamento, array $fields = null)
     {
-        $sql = "SELECT * FROM departamento WHERE iddepartamento='$iddepartamento'";
-        return ejecutarConsultaSimpleFila($sql);
+      $campos = is_null($fields) ? '*' : implode(', ', $fields);
+      $sql = "SELECT {$campos} FROM departamento WHERE iddepartamento='$iddepartamento'";
+      return ejecutarConsultaSimpleFila($sql);
     }
 
     //listar registros

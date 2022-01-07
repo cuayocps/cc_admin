@@ -1,41 +1,34 @@
-var tabla;
+var tabla, schedules;
 
 //funcion que se ejecuta al inicio
 function init() {
-    mostrarform(false);
-    listar();
-
-    $("#formulario").on("submit", function (e) {
-        guardaryeditar(e);
-    })
+  listar();
+  $("#formularioregistros").on("submit", "#Departamento__form", function (e) {
+    guardaryeditar(e);
+  })
 }
 
-//funcion limpiar
-function limpiar() {
-    $("#iddepartamento").val("");
-    $("#nombre").val("");
-    $("#descripcion").val("");
+//funcion cancelarform
+function cancelarform() {
+  $("#listadoregistros").show();
+  $("#btnagregar").show();
+  $("#formularioregistros").empty();
+  $('#formularioregistros').hide()
 }
 
 //funcion mostrar formulario
-function mostrarform(flag) {
-    limpiar();
-    if (flag) {
-        $("#listadoregistros").hide();
-        $("#formularioregistros").show();
-        $("#btnGuardar").prop("disabled", false);
-        $("#btnagregar").hide();
-    } else {
-        $("#listadoregistros").show();
-        $("#formularioregistros").hide();
-        $("#btnagregar").show();
-    }
-}
-
-//cancelar form
-function cancelarform() {
-    limpiar();
-    mostrarform(false);
+function mostrarform(html) {
+  $("#listadoregistros").hide();
+  $("#btnagregar").hide();
+  $("#formularioregistros").html(html);
+  $('#Schedule__time_from').timepicker(timepickerConfig);
+  $('#Schedule__time_to').timepicker(timepickerConfig);
+  $('#Schedule__form').on('submit', function(e) {
+    e.preventDefault();
+    addSchedule();
+  })
+  initScheduleTable();
+  $('#formularioregistros').show()
 }
 
 //funcion listar
@@ -64,6 +57,7 @@ function listar() {
         "order": [[0, "desc"]]//ordenar (columna, orden)
     }).DataTable();
 }
+
 //funcion para guardaryeditar
 function guardaryeditar(e) {
     e.preventDefault();//no se activara la accion predeterminada
@@ -79,24 +73,32 @@ function guardaryeditar(e) {
 
         success: function (datos) {
             bootbox.alert(datos);
-            mostrarform(false);
             tabla.ajax.reload();
+            cancelarform();
         }
     });
 
-    limpiar();
+    cancelarform();
+}
+
+function agregar() {
+    var departamento = {
+      iddepartamento: null,
+      nombre: '',
+      descripcion:''
+    };
+    const editar = Template.load('departamento/edit.tpl');
+    const html = editar(departamento);
+    mostrarform(html);
 }
 
 function mostrar(iddepartamento) {
     $.post("../ajax/departamento.php?op=mostrar", { iddepartamento: iddepartamento },
-        function (data, status) {
-            data = JSON.parse(data);
-            mostrarform(true);
-
-            $("#nombre").val(data.nombre);
-            $("#descripcion").val(data.descripcion);
-            $("#iddepartamento").val(data.iddepartamento);
-        })
+      function (departamento) {
+        const editar = Template.load('departamento/edit.tpl');
+        const html = editar(departamento);
+        mostrarform(html);
+      }, 'json')
 }
 
 
@@ -121,6 +123,68 @@ function activar(iddepartamento) {
             });
         }
     })
+}
+
+function initScheduleTable() {
+  schedules = $('#schedules').dataTable({
+    aProcessing: true,
+    aServerSide: true,
+    dom: 'frt',
+    ajax: {
+      url: '../ajax/schedule.php?op=listar&iddepartamento=' + $('#iddepartamento').val(),
+      type: 'get',
+      dataType: 'json',
+      error: function (e) {
+          console.log(e.responseText);
+      }
+    },
+    bDestroy: true,
+    iDisplayLength: 10,
+    columns: [
+      {
+        data: function (row) {
+          return '<button class="btn btn-danger btn-xs delete"><i class="fa fa-trash"></i></button>'
+        }
+      },
+      {
+        data: 'dia',
+        render: function (dia) {
+          return days[dia];
+        }
+      },
+      { data: 'hora_inicio' },
+      { data: 'hora_final' },
+      {
+        data: 'tolerancia',
+        render: function (tolerancia) {
+          return tolerancia + ' minuto' + (tolerancia == 1 ? '' : 's')
+        }
+      },
+      { data: 'fecha_creacion' },
+    ]
+  }).DataTable();
+  $('#schedules').on('click', '.btn.delete', function () {
+    var $tr = $(this).closest('tr');
+    var row = schedules.row($tr).data();
+    deleteSchedule(row)
+  })
+}
+
+function addSchedule() {
+  $('#Schedule__add').prop('disabled', true);
+  var scheduleData = $("#Schedule__form").serialize();
+  $.post('../ajax/schedule.php?op=agregar', scheduleData, function (r) {
+    schedules.ajax.reload();
+    $('#Schedule__add').prop('disabled', false);
+  }, 'json')
+}
+
+function deleteSchedule(row) {
+  console.log(row)
+  var scheduleData = {id: row.id};
+  $.post('../ajax/schedule.php?op=eliminar', scheduleData, function (r) {
+    schedules.ajax.reload();
+  }, 'json')
 }
 
 init();
