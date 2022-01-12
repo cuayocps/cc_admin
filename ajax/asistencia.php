@@ -6,7 +6,6 @@ use Carbon\Carbon;
 $asistencia = new Asistencia();
 
 $codigo_persona = isset($_POST["codigo_persona"]) ? limpiarCadena($_POST["codigo_persona"]) : "";
-$iddepartamento = isset($_POST["iddepartamento"]) ? limpiarCadena($_POST["iddepartamento"]) : "";
 $latitud = isset($_POST["latitud"]) ? limpiarCadena($_POST["latitud"]) : "";
 $longitud = isset($_POST["longitud"]) ? limpiarCadena($_POST["longitud"]) : "";
 
@@ -14,10 +13,9 @@ switch ($_GET['op']) {
     case 'registrar_asistencia':
         $result = $asistencia->verificarcodigo_persona($codigo_persona);
         $error = 'No hay empleado registrado con ese código.';
-        if ($result > 0) {
+        if (!empty($result)) {
             $result2 = $asistencia->seleccionarcodigo_persona($codigo_persona);
             $count2 = mysqli_num_rows($result2);
-
             $par = abs($count2 % 2);
             $error = '';
             if ($par == 0) {
