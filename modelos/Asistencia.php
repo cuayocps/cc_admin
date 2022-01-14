@@ -33,7 +33,11 @@ class Asistencia
     $sql = "SELECT * FROM {$this->table} WHERE idasistencia='$id'";
     $asistencia = ejecutarConsultaSimpleFila($sql);
     if ($tipo == 'Salida') {
-      $this->registrarResumen($asistencia);
+      try {
+        $this->registrarResumen($asistencia);
+      } catch (Exception $e) {
+        $asistencia['error'] = $e->getMessage();
+      }
     }
     return $asistencia;
   }
@@ -87,6 +91,9 @@ class Asistencia
     $id_usuario = $usuario->id($codigo_persona);
     $id_departamento = $usuario->departamentoId($id_usuario);
     $schedule = (new Schedule)->find($id_departamento, $salida['fecha_hora']);
+    if (empty($schedule)) {
+      throw new Exception('Departamento del usuario sin horario.');
+    }
     $horaSalida = Carbon::parse($salida['fecha_hora']);
     $fecha = $salida['fecha'];
     $zero = Carbon::parse($fecha);
@@ -130,4 +137,13 @@ class Asistencia
     return AsistenciaResumen::guardar(compact('id_usuario', 'fecha', 'normal', 'expected', 'extra'));
   }
 
+  public function listarSinResumen()
+  {
+    $sql = "SELECT A.* FROM asistencia AS A
+      LEFT JOIN usuarios AS U ON A.codigo_persona = U.codigo_persona
+      LEFT JOIN asistencia_resumen AS AR ON U.idusuario = AR.id_usuario
+      WHERE A.tipo = 'Salida'
+        AND AR.id IS NULL";
+    return consultaEnArray(ejecutarConsulta($sql));
+  }
 }
