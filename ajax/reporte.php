@@ -16,6 +16,7 @@ class ReporteController
   public function __construct()
   {
     $this->asistencia = new Asistencia();
+    $this->asistenciaResumen = new AsistenciaResumen();
     $this->usuario = new Usuario();
   }
 
@@ -30,6 +31,16 @@ class ReporteController
       return ['success' => false];
     }
 
+    $horas = $this->asistencia->reporte($codigoPersona, $ano, $mes);
+    foreach ($horas as &$hora)
+    {
+      $resumen = $this->asistenciaResumen->buscar($id_usuario, $hora['fecha'], ['normal']);
+      $total = 0;
+      if (!empty($resumen)) {
+        $total = $resumen['normal'];
+      }
+      $hora['total'] = $total;
+    }
     $nombreMes = mes($mes);
     $data = [
       'fecha' => [
@@ -37,7 +48,7 @@ class ReporteController
         'mes' => $nombreMes
       ],
       'usuario' => $this->usuario->info($id_usuario),
-      'horas' => $this->asistencia->reporte($codigoPersona, $ano, $mes)
+      'horas' => $horas
     ];
     $html = $this->getHtmlReport($data);
     $dompdf = new Dompdf();

@@ -2,6 +2,7 @@
 
 require_once dirname(__DIR__) . '/admin/config/Conexion.php';
 
+require_once dirname(__FILE__) . '/AsistenciaResumen.php';
 require_once dirname(__FILE__) . '/Schedule.php';
 require_once dirname(__FILE__) . '/Usuario.php';
 
@@ -31,38 +32,44 @@ class Asistencia
     $id = ejecutarConsulta_retornarID($sql);
     $sql = "SELECT * FROM {$this->table} WHERE idasistencia='$id'";
     $asistencia = ejecutarConsultaSimpleFila($sql);
-    // if ($tipo == 'Salida') {
-    //   $this->registrarExtra($asistencia);
-    // }
+    if ($tipo == 'Salida') {
+      try {
+        $this->registrarResumen($asistencia);
+      } catch (Exception $e) {
+        $asistencia['error'] = $e->getMessage();
+      }
+    }
     return $asistencia;
   }
 
-  //listar registros
   public function listar()
   {
     $sql = "SELECT * FROM {$this->table}";
     return ejecutarConsulta($sql);
   }
 
-  public function reporte($person_code, $year, $month)
+  public function reporte($person_code, $year, $month, $day = null)
   {
+    $day_from = "{$year}-{$month}-" . (empty($day) ? '01' : str_pad($day, 2, '0', STR_PAD_LEFT));
+    $day_to = "{$year}-{$month}-" . (empty($day) ? '31' : str_pad($day, 2, '0', STR_PAD_LEFT));
     $sql = "SELECT
+        entrada.fecha,
         DAY(entrada.fecha) AS dia,
         DAYOFWEEK(entrada.fecha) AS dia_nombre,
         entrada.idasistencia AS id_entrada,
         entrada.fecha_hora AS hora_entrada,
-        salida.idasistencia AS id_salida,
-        salida.fecha_hora AS hora_salida,
-        ((TIME_TO_SEC(TIME(salida.fecha_hora)) - TIME_TO_SEC(TIME(entrada.fecha_hora))) / 3600) - 1 AS total
+        (SELECT salida.fecha_hora
+          FROM {$this->table} AS salida
+          WHERE salida.idasistencia > entrada.idasistencia
+            AND salida.tipo = 'Salida'
+            AND salida.codigo_persona = entrada.codigo_persona
+            AND salida.fecha = entrada.fecha
+          LIMIT 1
+        ) AS hora_salida
       FROM {$this->table} AS entrada
-      LEFT JOIN {$this->table} AS salida ON (
-        salida.tipo = 'Salida'
-        AND salida.codigo_persona = entrada.codigo_persona
-        AND salida.fecha = entrada.fecha
-      )
       WHERE entrada.tipo = 'Entrada'
         AND entrada.codigo_persona = '$person_code'
-        AND entrada.fecha BETWEEN '{$year}-{$month}-01' AND '{$year}-{$month}-31'
+        AND entrada.fecha BETWEEN '$day_from' AND '$day_to'
       ORDER BY entrada.idasistencia";
     return consultaEnArray(ejecutarConsulta($sql));
   }
@@ -77,29 +84,66 @@ class Asistencia
     return ejecutarConsultaSimpleFila($sql);
   }
 
-  public function registrarExtra($salida)
+  public function registrarResumen($salida)
   {
-    // seleccionar entrada
-    // seleccionar departamento del usuario
-    // seleccionar horario del día
-    // calcular
-    // Al registrar el egreso pasado la tolerancia, según horario, calcular las horas y/o minutos extra
-    // y registrarlo como horas extra.
-    // tener en cuenta que si el intreso fue pasado la hora de entrada, los minutos pasados la hora de salida
-    // son recuperación hasta cumplir las horas correspondientes al día.
     $usuario = new Usuario;
     $codigo_persona = $salida['codigo_persona'];
     $id_usuario = $usuario->id($codigo_persona);
-    $entrada = $this->entrada($codigo_persona, $salida);
     $id_departamento = $usuario->departamentoId($id_usuario);
-    $schedule = (new Schedule)->find($id_departamento, $entrada['fecha_hora']);
-    $horaEntrada = Carbon::parse($entrada['fecha_hora']);
+    $schedule = (new Schedule)->find($id_departamento, $salida['fecha_hora']);
+    if (empty($schedule)) {
+      throw new Exception('Departamento del usuario sin horario.');
+    }
     $horaSalida = Carbon::parse($salida['fecha_hora']);
-    $diferenciaEntrada = 0;
+    $fecha = $salida['fecha'];
+    $zero = Carbon::parse($fecha);
+    $horarioEntrada = Carbon::parse("{$fecha} {$schedule['hora_inicio']}");
+    $horarioSalida = Carbon::parse("{$fecha} {$schedule['hora_final']}");
+    $times = $this->reporte($codigo_persona, $zero->year, $zero->month, $zero->day);
 
+    $counter = count($times);
+    $total = 0;
+    foreach ($times as $i => $time) {
+      if (empty($time['hora_entrada']) || empty($time['hora_salida'])) {
+        continue;
+      }
+      $in = Carbon::parse($time['hora_entrada'])->diffInMinutes($zero);
+      $out = Carbon::parse($time['hora_salida'])->diffInMinutes($zero);
+      $scheduleIn = $horarioEntrada->diffInMinutes($zero);
+      $scheduleOut = $horarioSalida->diffInMinutes($zero);
+      $diffIn = $in - $scheduleIn;
+      if ($diffIn < 0 && $i == 0) {
+        $in = $scheduleIn;
+      }
+      $diffOut = $out - $scheduleOut;
 
+      if ($diffOut > 0 && $counter == 1) {
+        $out -= 60;
+      }
+      $total += $out - $in;
+    }
+    $expected = $scheduleOut - $scheduleIn - 60;
+    $extra = 0;
+    $normal = $total;
+    $expectedTolerance = ($expected + $schedule['tolerancia']);
+    if ($total > $expected) {
+      $normal = $expected;
+    }
+    if ($total > $expected + $schedule['tolerancia']) {
+      $extra = ($total - $expected) / 60;
+    }
+    $expected = $expected / 60;
+    $normal = $normal / 60;
+    return AsistenciaResumen::guardar(compact('id_usuario', 'fecha', 'normal', 'expected', 'extra'));
+  }
 
-
-    // pr(compact('id_usuario', 'id_departamento', 'codigo_persona', 'entrada', 'salida', 'schedule'));
+  public function listarSinResumen()
+  {
+    $sql = "SELECT A.* FROM asistencia AS A
+      LEFT JOIN usuarios AS U ON A.codigo_persona = U.codigo_persona
+      LEFT JOIN asistencia_resumen AS AR ON U.idusuario = AR.id_usuario
+      WHERE A.tipo = 'Salida'
+        AND AR.id IS NULL";
+    return consultaEnArray(ejecutarConsulta($sql));
   }
 }

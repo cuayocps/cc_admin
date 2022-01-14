@@ -21,7 +21,7 @@ class Schedule
 
   public function find($id_departamento, $fecha)
   {
-    $sql = "SELECT id, dia, hora_inicio, hora_final FROM {$this->table} WHERE id_departamento='$id_departamento' AND dia = DAYOFWEEK('$fecha')";
+    $sql = "SELECT id, dia, hora_inicio, hora_final, tolerancia FROM {$this->table} WHERE id_departamento='$id_departamento' AND dia = DAYOFWEEK('$fecha')";
     $schedule = ejecutarConsultaSimpleFila($sql);
     return empty($schedule) ? null : $schedule;
   }
