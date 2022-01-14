@@ -36,6 +36,14 @@ class AsistenciaResumen
     return empty($resumen) ? null : $resumen['id'];
   }
 
+  public function buscar($id_usuario, $fecha, $campos = null)
+  {
+    $campos = is_null($campos) ? '*' : implode(', ', $campos);
+    $sql = "SELECT {$campos} FROM {$this->table} WHERE id_usuario='{$id_usuario}' AND fecha='{$fecha}'";
+    $resumen = ejecutarConsultaSimpleFila($sql);
+    return empty($resumen) ? null : $resumen;
+  }
+
   public function agregar(array $datos)
   {
     $created_at = date('Y-m-d H:i:s');
