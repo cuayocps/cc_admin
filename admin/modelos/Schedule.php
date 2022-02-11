@@ -16,6 +16,16 @@ class Schedule
     'Sábado',
     'Domingo'
   ];
+  const DAYS_OF_WEEK_NAMES = [
+    2 => 'Lunes',
+    3 => 'Martes',
+    4 => 'Miércoles',
+    5 => 'Jueves',
+    6 => 'Viernes',
+    7 => 'Sábado',
+    1 => 'Domingo'
+  ];
+
 
   protected $table = 'schedules';
 
