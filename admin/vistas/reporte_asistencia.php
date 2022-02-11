@@ -15,12 +15,6 @@ require 'header.php';
           <div class="box-header with-border">
             <h1 class="box-title">Reporte de Asistencias</h1>
             <div class="panel-body">
-              <small>Enviar este formulario a admin\ajax\reporte_asistencia.php y filtrar por departamento
-                para seleccionar las personas del mismo e iterar en cada una
-                con $this->asistencia->reporte($codigoPersona, $ano, $mes);
-                a menos que se seleccione una persona que se creará un array de personas [id]
-                para realizar el paso anterior.</small>
-              <small>cambiar el reporte para usar templata del contenido y template del html con el contenido dentro del BODY. (estan fuera de admin)</small>
               <form id="reporte-asistencia-form" method="POST">
                 <div class="form-group row">
                   <label class="col-xs-4 control-label">Fecha Inicio</label>
