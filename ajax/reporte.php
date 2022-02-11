@@ -50,7 +50,8 @@ class ReporteController
       'usuario' => $this->usuario->info($id_usuario),
       'horas' => $horas
     ];
-    $html = $this->getHtmlReport($data);
+    $content = $this->templateToHtml('reporte_asistencia_usuario', $data);
+    $html = $this->templateToHtml('html', compact('content'));
     $dompdf = new Dompdf();
     $dompdf->loadHtml($html);
     $dompdf->setPaper('letter', 'portrait');
@@ -68,10 +69,10 @@ class ReporteController
     $mail = new PHPMailer();
     $mail->IsSMTP();
 
-    $mail->From = "cuayocps@gmail.com";
+    $mail->From = 'noreply@prove.cl';
     $mail->SMTPAuth = true;
     $mail->SMTPSecure = 'tls';
-    $mail->Host = "smtp.gmail.com";
+    $mail->Host = 'smtp.gmail.com';
     $mail->Port = 587;
     $mail->Username = 'cuayocps@gmail.com';
     $mail->Password = 'xbmzzzegnrbczfaf';
@@ -87,9 +88,9 @@ class ReporteController
     $mail->Send();
   }
 
-  protected function getHtmlReport($data)
+  protected function templateToHtml($template, $data)
   {
-    $template = dirname(__DIR__) . '/vistas/templates/reporte_asistencia_usuario.php';
+    $template = dirname(__DIR__) . "/vistas/templates/{$template}.php";
     ob_start();
     extract($data);
     include $template;
