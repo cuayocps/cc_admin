@@ -165,7 +165,7 @@
                              <ul class="treeview-menu">
                                  <li><a href="asistencia.php"><i class="fa fa-circle-o"></i> Asistencia</a></li>
                                  <li><a href="rptasistencia.php"><i class="fa fa-circle-o"></i> Reportes</a></li>
-
+                                 <li><a href="reporte_asistencia.php"><i class="fa fa-circle-o"></i> Reporte Detallado</a></li>
                              </ul>
                          </li>
                      <?php } ?>

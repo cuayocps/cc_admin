@@ -4,6 +4,7 @@ require "../config/Conexion.php";
 class Asistencia
 {
 
+    protected $table = 'asistencia';
 
     //implementamos nuestro constructor
     public function __construct()
@@ -48,5 +49,29 @@ class Asistencia
                 WHERE DATE(a.fecha) >= '$fecha_inicio'
                     AND DATE(a.fecha) <= '$fecha_fin' $options";
         return ejecutarConsulta($sql);
+    }
+
+    public function reporte($person_code, $fecha_inicio, $fecha_fin)
+    {
+      $sql = "SELECT
+          entrada.fecha,
+          DAY(entrada.fecha) AS dia,
+          DAYOFWEEK(entrada.fecha) AS dia_nombre,
+          entrada.idasistencia AS id_entrada,
+          entrada.fecha_hora AS hora_entrada,
+          (SELECT salida.fecha_hora
+            FROM {$this->table} AS salida
+            WHERE salida.idasistencia > entrada.idasistencia
+              AND salida.tipo = 'Salida'
+              AND salida.codigo_persona = entrada.codigo_persona
+              AND salida.fecha = entrada.fecha
+            LIMIT 1
+          ) AS hora_salida
+        FROM {$this->table} AS entrada
+        WHERE entrada.tipo = 'Entrada'
+          AND entrada.codigo_persona = '$person_code'
+          AND entrada.fecha BETWEEN '$fecha_inicio' AND '$fecha_fin'
+        ORDER BY entrada.idasistencia";
+      return consultaEnArray(ejecutarConsulta($sql));
     }
 }
