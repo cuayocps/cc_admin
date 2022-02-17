@@ -37,8 +37,7 @@ class Usuario
       FROM {$this->table} AS u
       LEFT JOIN departamento AS d using (iddepartamento)
       WHERE u.idusuario = '$id_usuario'";
-   return ejecutarConsultaSimpleFila($sql);
-
+    return ejecutarConsultaSimpleFila($sql);
   }
 
 }

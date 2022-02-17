@@ -63,4 +63,24 @@ class Departamento
         $sql = "SELECT nombre FROM departamento where iddepartamento='$departamento'";
         return ejecutarConsulta($sql);
     }
+
+    public function nombre($id)
+    {
+      $sql = "SELECT nombre FROM departamento WHERE iddepartamento = $id";
+      $departamento = ejecutarConsultaSimpleFila($sql);
+      return $departamento['nombre'];
+    }
+
+    public function nombres($ids)
+    {
+      $listaIds = implode(',', $ids);
+      $sql = "SELECT iddepartamento, nombre FROM departamento WHERE iddepartamento IN ($listaIds)";
+      $datos = consultaEnArray(ejecutarConsulta($sql));
+      $ret = [];
+      foreach ($datos as $departamento) {
+        $id = $departamento['iddepartamento'];
+        $ret[$id] = $departamento['nombre'];
+      }
+      return $ret;
+    }
 }

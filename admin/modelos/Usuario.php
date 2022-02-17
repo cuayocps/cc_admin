@@ -5,6 +5,7 @@ require_once dirname(__DIR__) . '/config/Conexion.php';
 class Usuario
 {
 
+  protected $table = 'usuarios';
 
     //implementamos nuestro constructor
     public function __construct()
@@ -93,6 +94,34 @@ class Usuario
         $sql = 'SELECT * FROM usuarios WHERE ' . implode(' AND ', $where);
 
         return ejecutarConsultaSimpleFila($sql);
+    }
+
+    public function id($codigoPersona)
+    {
+      $sql = "SELECT idusuario FROM {$this->table} WHERE codigo_persona = '$codigoPersona'";
+      $usuario = ejecutarConsultaSimpleFila($sql);
+      return empty($usuario) ? null : $usuario['idusuario'];
+    }
+
+    public function info($codigo_persona, array $campos = null)
+    {
+      $campos = is_null($campos) ? "idusuario, codigo_persona, iddepartamento, nombre, CONCAT_WS(' ', nombre, apellidos) AS nombre_completo" : implode(', ', $campos);
+      $sql = "SELECT $campos
+        FROM {$this->table}
+        WHERE codigo_persona = '$codigo_persona'";
+      return ejecutarConsultaSimpleFila($sql);
+    }
+
+    public function allInfo($iddepartamento = null)
+    {
+      $where = '';
+      if (!empty($iddepartamento)) {
+        $where = "WHERE iddepartamento = '$iddepartamento'";
+      }
+      $sql = "SELECT idusuario, codigo_persona, iddepartamento, nombre, CONCAT_WS(' ', nombre, apellidos) AS nombre_completo
+        FROM {$this->table}
+        $where";
+      return consultaEnArray(ejecutarConsulta($sql));
     }
 
 }
