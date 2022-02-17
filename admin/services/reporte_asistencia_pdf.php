@@ -15,7 +15,8 @@ class ReporteAsistenciaPdf
   {
     $pdf = $this->makePdf($data, $subtitle);
     $output = $pdf->output();
-    $filename = "/tmp/{$nombre}.pdf";
+    $tmp = TMP_DIR;
+    $filename = "{$tmp}/{$nombre}.pdf";
     file_put_contents($filename, $output);
     return $filename;
   }

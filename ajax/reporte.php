@@ -57,7 +57,8 @@ class ReporteController
     $dompdf->setPaper('letter', 'portrait');
     $dompdf->render();
     $output = $dompdf->output();
-    $pdf = "/tmp/Reporte-Asistencia-{$ano}-{$nombreMes}.pdf";
+    $tmp = TMP_DIR;
+    $pdf = "{$tmp}/Reporte-Asistencia-{$ano}-{$nombreMes}.pdf";
     file_put_contents($pdf, $output);
     $body = "{$data['usuario']['nombre']}:\n\nSegún lo solicitado, se adjunta su reporte de asistencia de {$nombreMes} de {$ano}.\n\nSaludos.";
     $this->enviar($correo, "Reporte de Asistencia de {$nombreMes} de {$ano}", $body, $pdf);

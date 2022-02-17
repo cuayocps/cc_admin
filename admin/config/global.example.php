@@ -17,6 +17,8 @@ define('DB_PASSWORD', '');
 //codificacion de caracteres
 define('DB_ENCODE', 'utf8');
 
+define('TMP_DIR', '/tmp');
+
 define('TIMEZONE', 'America/Santiago');
 
 date_default_timezone_set(TIMEZONE);
