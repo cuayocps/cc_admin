@@ -4,10 +4,11 @@ require_once '../modelos/Asistencia.php';
 require_once '../modelos/AsistenciaResumen.php';
 require_once '../modelos/Usuario.php';
 require_once '../modelos/Departamento.php';
+require_once '../services/reporte_asistencia_pdf.php';
+require_once '../services/reporte_asistencia_xlsx.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 use Carbon\Carbon;
-use Dompdf\Dompdf;
 
 if (strlen(session_id()) < 1) {
   session_start();
@@ -32,29 +33,26 @@ class ReporteController
     $codigoPersona = limpiarCadena($_POST['idcliente']);
 
     $data = $this->getReportData($idDepartamento, $codigoPersona, $fecha_inicio, $fecha_fin);
-
-    $content = '';
-    while (true) {
-      $departamento = array_shift($data);
-      $content .= $this->templateToHtml('departamento', ['nombre' => $departamento['nombre']]);
-      foreach ($departamento['usuarios'] as $usuario) {
-        $content .= $this->templateToHtml('reporte_asistencia_usuario', $usuario);
-      }
-      if (empty($data)) {
-        break;
-      } else {
-        $content .= '<div class="page_break"></div>';
-      }
-    }
-
-    $html = $this->templateToHtml('html', compact('content', 'fecha_inicio', 'fecha_fin'));
-
-    $dompdf = new Dompdf();
-    $dompdf->loadHtml($html);
-    $dompdf->setPaper('letter', 'portrait');
-    $dompdf->render();
     $nombre = $this->nombreReporte($idDepartamento, $codigoPersona, $fecha_inicio, $fecha_fin);
-    $dompdf->stream($nombre);
+    $subtitle = "del {$fecha_inicio->format('d-m-Y')} al {$fecha_fin->format('d-m-Y')}";
+    $pdf = new ReporteAsistenciaPdf();
+    $pdf->download($nombre, $data, $subtitle);
+    exit;
+  }
+
+  public function xlsx()
+  {
+    $fecha_inicio = Carbon::parse(limpiarCadena($_POST['fecha_inicio']));
+    $fecha_fin = Carbon::parse(limpiarCadena($_POST['fecha_fin']));
+    $idDepartamento = limpiarCadena($_POST['iddepartamento']);
+    $codigoPersona = limpiarCadena($_POST['idcliente']);
+
+    $data = $this->getReportData($idDepartamento, $codigoPersona, $fecha_inicio, $fecha_fin);
+    $nombre = $this->nombreReporte($idDepartamento, $codigoPersona, $fecha_inicio, $fecha_fin);
+
+    $xlsx = new ReporteAsistenciaXlsx();
+    $this->dataForTable($data);
+    $xlsx->download($nombre, $data);
     exit;
   }
 
@@ -80,15 +78,6 @@ class ReporteController
     }
 
     $mail->Send();
-  }
-
-  protected function templateToHtml($template, $data)
-  {
-    $template = dirname(__DIR__) . "/vistas/templates/{$template}.php";
-    ob_start();
-    extract($data);
-    include $template;
-    return ob_get_clean();
   }
 
   protected function nombreReporte($idDepartamento, $codigoPersona, Carbon $fecha_inicio, Carbon $fecha_fin)
@@ -175,6 +164,25 @@ class ReporteController
       $hora['extra'] = $extra;
     }
     return $horas;
+  }
+
+  protected function dataForTable(&$data)
+  {
+    foreach ($data as $i => $departamento) {
+      $tablaHoras = [];
+      foreach ($departamento['usuarios'] as $u => $usuario) {
+        $horas = $usuario['horas'];
+        unset($usuario['horas']);
+        foreach ($horas as $hora) {
+          $tablaHoras[] = array_merge($usuario, $hora);
+        }
+      }
+      unset($data[$i]['usuarios']);
+      usort($tablaHoras, function ($a, $b) {
+        return $a['fecha']->format('Ymd') > $b['fecha']->format('Ymd');
+      });
+      $data[$i]['horas'] = $tablaHoras;
+    }
   }
 }
 

@@ -1,11 +1,6 @@
 <?php
-
-use Carbon\Carbon;
-
 require_once dirname(dirname(__DIR__)) . '/modelos/Schedule.php';
-
-$hoy = Carbon::now();
-
+use Carbon\Carbon;
 ?>
 
 <div class="user">Colaborador: <?= $nombre_completo ?></div>

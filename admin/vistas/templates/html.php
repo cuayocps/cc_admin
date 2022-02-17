@@ -51,7 +51,7 @@
     <center>Reporte de Asistencia</center>
   </h2>
   <h3>
-    <center>del <?= $fecha_inicio->format('d-m-Y') ?> al <?= $fecha_fin->format('d-m-Y') ?></center>
+    <center><?= $subtitle ?></center>
   </h3>
 
   <?= $content ?>

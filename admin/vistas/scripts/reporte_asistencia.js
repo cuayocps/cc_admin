@@ -13,8 +13,8 @@ function init() {
   }).trigger('changed.bs.select');
 }
 
-function reporte_asistencia_pdf() {
-  $('#reporte-asistencia-form').attr('action', '../ajax/reporte_asistencia.php?op=pdf');
+function reporte_asistencia(format) {
+  $('#reporte-asistencia-form').attr('action', '../ajax/reporte_asistencia.php?op=' + format);
   $('#reporte-asistencia-form').submit();
 }
 

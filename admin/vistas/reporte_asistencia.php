@@ -52,7 +52,8 @@ require 'header.php';
                 </div> -->
                 <div class="form-group row">
                   <div class="col-xs-12 text-right">
-                    <button class="btn btn-info" type="button" onclick="reporte_asistencia_pdf();">Descargar PDF</button>
+                    <button class="btn btn-info" type="button" onclick="reporte_asistencia('pdf');">Descargar PDF</button>
+                    <button class="btn btn-info" type="button" onclick="reporte_asistencia('xlsx');">Descargar Excel</button>
                   </div>
                 </div>
               </form>
