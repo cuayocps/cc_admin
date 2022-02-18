@@ -9,19 +9,17 @@ class ReporteAsistenciaXlsx
 
   public function download($nombre, $data)
   {
-    $writer = $this->makeWriter($data);
+    $file = $this->getFile($nombre, $data);
     header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
     header("Content-Disposition: attachment;filename=\"{$nombre}.xlsx\"");
     header('Cache-Control: max-age=0');
-    $writer->save('php://output');
+    file_put_contents('php://output', file_get_contents($file));
+    unlink($file);
   }
 
   public function getFile($nombre, $data)
   {
     $writer = $this->makeWriter($data);
-    header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-    header("Content-Disposition: attachment;filename=\"{$nombre}.xlsx\"");
-    header('Cache-Control: max-age=0');
     $tmp = TMP_DIR;
     $filename = "{$tmp}/{$nombre}.xlsx";
     $writer->save($filename);
