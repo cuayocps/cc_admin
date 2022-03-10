@@ -40,19 +40,8 @@ require 'header.php';
                     <select name="idcliente" id="idcliente" class="form-control selectpicker" data-live-search="true"></select>
                   </div>
                 </div>
-                <!-- <div class="form-group row">
-                  <label class="col-xs-4 control-label"></label>
-                  <div class="col-xs-8">
-                    <input type="hidden" name="empty" value="0">
-                    <label class="control-label">
-                      <input type="checkbox" name="empty" value="1">
-                      Incluir departamentos y usuarios sin horas.
-                    </label>
-                  </div>
-                </div> -->
                 <div class="form-group row">
                   <div class="col-xs-12 text-right">
-                    <button class="btn btn-info" type="button" onclick="reporte_asistencia('pdf');">Descargar PDF</button>
                     <button class="btn btn-info" type="button" onclick="reporte_asistencia('xlsx');">Descargar Excel</button>
                   </div>
                 </div>
