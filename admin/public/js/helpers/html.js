@@ -98,6 +98,9 @@ var Html = {
     }).html(text)
     return this.div($input + $label, 'custom-control custom-switch')
   },
+  e: function (name, classes, attrs) {
+    return this.element(name, classes, attrs);
+  },
   element: function (name, classes, attrs) {
     var $el = $('<' + name + '/>');
     if (attrs) {

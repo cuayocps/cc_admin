@@ -40,6 +40,11 @@ function init() {
         $('#idtipousuario').selectpicker('refresh');
     });
 
+    //cargamos los items al select grupo
+    $.post("../ajax/grupo.php?op=listar", function (grupos) {
+        window.listaGrupos = grupos;
+    }, 'json');
+
     $("#formularioNomina").on('submit', function (event) {
         event.preventDefault();
         $('#cargandoNomina').show()
@@ -158,7 +163,6 @@ function guardaryeditar(e) {
     e.preventDefault();//no se activara la accion predeterminada
     $("#btnGuardar").prop("disabled", true);
     var formData = new FormData($("#formulario")[0]);
-
     $.ajax({
         url: "../ajax/usuario.php?op=guardaryeditar",
         type: "POST",
@@ -197,36 +201,59 @@ function editar_clave(c) {
     limpiar();
     $("#getCodeModal").modal('hide');
 }
+
 function mostrar(idusuario) {
     $.post("../ajax/usuario.php?op=mostrar", { idusuario: idusuario },
         function (data, status) {
             data = JSON.parse(data);
             mostrarform(true);
-            if ($("#idusuario").val(data.idusuario).length == 0) {
-                $("#claves").show();
-
-            } else {
-                $("#claves").hide();
-            }
-            $("#nombre").val(data.nombre);
-            $("#iddepartamento").val(data.iddepartamento);
-            $("#iddepartamento").selectpicker('refresh');
-            $("#idtipousuario").val(data.idtipousuario);
-            $("#idtipousuario").selectpicker('refresh');
-            $("#apellidos").val(data.apellidos);
-            $("#email").val(data.email);
-            $("#login").val(data.login);
-            $("#codigo_persona").val(data.codigo_persona);
-            $("#imagenmuestra").show();
-            $("#imagenmuestra").attr("src", "../files/usuarios/" + data.imagen);
-            $("#imagenactual").val(data.imagen);
-            $("#idusuario").val(data.idusuario);
-
-
+            actualizaForm(data);
         });
     $.post("../ajax/usuario.php?op=permisos&id=" + idusuario, function (r) {
         $("#permisos").html(r);
     });
+}
+
+function mostrarNuevo(idusuario) {
+  mostrarform(true);
+  var data = {
+    idusuario: '',
+    nombre: '',
+    iddepartamento: '',
+    idtipousuario: '',
+    apellidos: '',
+    email: '',
+    login: '',
+    codigo_persona: '',
+    imagen: 'default.jpg',
+    grupos: []
+  };
+  actualizaForm(data);
+}
+
+function actualizaForm(data) {
+  $("#idusuario").val(data.idusuario);
+  if (data.idusuario.length == 0) {
+    $("#claves").show();
+  } else {
+    $("#claves").hide();
+  }
+  $("#nombre").val(data.nombre);
+  $("#iddepartamento").val(data.iddepartamento);
+  $("#iddepartamento").selectpicker('refresh');
+  $("#idtipousuario").val(data.idtipousuario);
+  $("#idtipousuario").selectpicker('refresh');
+  $("#apellidos").val(data.apellidos);
+  $("#email").val(data.email);
+  $("#login").val(data.login);
+  $("#codigo_persona").val(data.codigo_persona);
+  if (data.imagen) {
+    $("#imagenmuestra").attr("src", "../files/usuarios/" + data.imagen);
+    $("#imagenmuestra").show();
+  }
+  $("#imagenactual").val(data.imagen);
+  $("#idusuario").val(data.idusuario);
+  new GroupsSelector('#grupos', window.listaGrupos, data.grupos);
 }
 
 function mostrar_clave(idusuario) {

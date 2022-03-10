@@ -17,7 +17,7 @@ class Usuario
     {
         $fechacreado = date('Y-m-d H:i:s');
         $sql = "INSERT INTO usuarios (nombre,apellidos,login,iddepartamento,idtipousuario,email,password,imagen,fechacreado,usuariocreado,codigo_persona,estado,idmensaje) VALUES ('$nombre','$apellidos','$login','$iddepartamento','$idtipousuario','$email','$clavehash','$imagen','$fechacreado','$usuariocreado','$codigo_persona','1','0')";
-        return ejecutarConsulta($sql);
+        return ejecutarConsulta_retornarID($sql);
     }
 
     public function editar($idusuario, $nombre, $apellidos, $login, $iddepartamento, $idtipousuario, $email, $imagen, $usuariocreado, $codigo_persona)

@@ -1,12 +1,11 @@
 <?php
-//activamos almacenamiento en el buffer
-ob_start();
 session_start();
 if (!isset($_SESSION['nombre'])) {
-    header("Location: login.html");
-} else {
+  header("Location: login.html");
+  exit;
+}
 
-    require 'header.php';
+require 'header.php';
 ?>
     <div class="content-wrapper">
         <!-- Main content -->
@@ -20,7 +19,7 @@ if (!isset($_SESSION['nombre'])) {
                             <h1 class="box-title">Usuarios</h1>
                             <div class="box-tools pull-right">
                                 <button class="btn btn-default" onclick="mostrarNominaForm(true)" id="btnSubirNomina"><i class="fa fa-cloud-upload"></i> Cargar Nómina</button>
-                                <button class="btn btn-success" onclick="mostrarform(true)" id="btnagregar"><i class="fa fa-plus-circle"></i> Agregar</button>
+                                <button class="btn btn-success" onclick="mostrarNuevo()" id="btnagregar"><i class="fa fa-plus-circle"></i> Agregar</button>
                             </div>
                         </div>
                         <!--box-header-->
@@ -98,19 +97,31 @@ if (!isset($_SESSION['nombre'])) {
                                     <input class="form-control" type="password" name="clave" id="clave" maxlength="64" placeholder="Clave">
                                 </div>
                                 <div class="form-group col-lg-6 col-md-6 col-xs-12" id="claves">
-                                    <label for="">Clave de asistencia(*):</label>
-                                    <button class="btn btn-info" type="button" onclick="generar(6);">Generar</button>
+                                  <label for="codigo_persona">Clave de asistencia(*):</label>
+                                  <div class="input-group">
                                     <input class="form-control" type="text" name="codigo_persona" id="codigo_persona" maxlength="64" placeholder="Clave">
+                                    <span class="input-group-btn">
+                                      <button class="btn btn-info" type="button" onclick="generar(6);">Generar</button>
+                                    </span>
+                                  </div>
                                 </div>
-                                <div class="form-group col-lg-6 col-md-6 col-xs-12">
+                                <div class="form-group col-lg-4 col-md-4 col-xs-8">
                                     <label for="">Imagen:</label>
                                     <input class="form-control filestyle" data-buttonText="Seleccionar foto" type="file" name="imagen" id="imagen">
                                     <input type="hidden" name="imagenactual" id="imagenactual">
-                                    <img src="" alt="" width="150px" height="120" id="imagenmuestra">
                                 </div>
-                                <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="form-group col-lg-2 col-md-2 col-xs-4">
+                                  <img src="" alt="" id="imagenmuestra" style="max-width: 100%; min-height: 32px;" class="img-thumbnail pull-right">
+                                </div>
+                                <div class="row">
+                                  <div class="form-group col-lg-6 col-md-6 col-xs-12">
+                                    <label for="">Grupos de correo:</label>
+                                    <input class="form-control" type="hidden" name="grupos" id="grupos">
+                                  </div>
+                                  <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <button class="btn btn-primary" type="submit" id="btnGuardar"><i class="fa fa-save"></i> Guardar</button>
-                                    <button class="btn btn-danger" onclick="cancelarform()" type="button"><i class="fa fa-arrow-circle-left"></i> Cancelar</button>
+                                    <button class="btn btn-danger" onclick="cancelarform()" type="reset"><i class="fa fa-arrow-circle-left"></i> Cancelar</button>
+                                  </div>
                                 </div>
                             </form>
                         </div>
@@ -199,8 +210,4 @@ if (!isset($_SESSION['nombre'])) {
     require 'footer.php';
     ?>
     <script src="scripts/usuario.js"></script>
-<?php
-}
-
-ob_end_flush();
-?>
+    <script src="scripts/groups-selector.js"></script>

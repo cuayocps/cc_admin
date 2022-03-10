@@ -1,8 +1,10 @@
 <?php
 session_start();
 require_once dirname(__DIR__) . '/modelos/Usuario.php';
+require_once dirname(__DIR__) . '/modelos/UsuarioGrupos.php';
 
 $usuario = new Usuario();
+$usuario_grupos = new UsuarioGrupos();
 
 $idusuarioc = isset($_POST["idusuarioc"]) ? limpiarCadena($_POST["idusuarioc"]) : "";
 $clavec = isset($_POST["clavec"]) ? limpiarCadena($_POST["clavec"]) : "";
@@ -19,34 +21,36 @@ $imagen = isset($_POST["imagen"]) ? limpiarCadena($_POST["imagen"]) : "";
 $usuariocreado = isset($_POST["nombre"]) ? limpiarCadena($_POST["nombre"]) : "";
 $idmensaje = isset($_POST["idmensaje"]) ? limpiarCadena($_POST["idmensaje"]) : "";
 
-
 switch ($_GET["op"]) {
     case 'guardaryeditar':
-
-        if (!file_exists($_FILES['imagen']['tmp_name']) || !is_uploaded_file($_FILES['imagen']['tmp_name'])) {
-            $imagen = $_POST["imagenactual"];
+        if (empty($_FILES['imagen']) || !file_exists($_FILES['imagen']['tmp_name']) || !is_uploaded_file($_FILES['imagen']['tmp_name'])) {
+            $imagen = $_POST['imagenactual'];
         } else {
-
             $ext = explode(".", $_FILES["imagen"]["name"]);
             if ($_FILES['imagen']['type'] == "image/jpg" || $_FILES['imagen']['type'] == "image/jpeg" || $_FILES['imagen']['type'] == "image/png") {
                 $imagen = round(microtime(true)) . '.' . end($ext);
                 move_uploaded_file($_FILES["imagen"]["tmp_name"], "../files/usuarios/" . $imagen);
             }
         }
-
         //Hash SHA256 para la contraseña
         $clavehash = hash("SHA256", $password);
 
         if (empty($idusuario)) {
-            $idusuario = $_SESSION["idusuario"];
-            $rspta = $usuario->insertar($nombre, $apellidos, $login, $iddepartamento, $idtipousuario, $email, $clavehash, $imagen, $usuariocreado, $codigo_persona);
-            echo $rspta ? "Datos registrados correctamente" : "No se pudo registrar todos los datos del usuario";
+            $idusuario = $usuario->insertar($nombre, $apellidos, $login, $iddepartamento, $idtipousuario, $email, $clavehash, $imagen, $usuariocreado, $codigo_persona);
+            $msg = $idusuario ? "Datos registrados correctamente" : "No se pudo registrar todos los datos del usuario";
         } else {
             $rspta = $usuario->editar($idusuario, $nombre, $apellidos, $login, $iddepartamento, $idtipousuario, $email, $imagen, $usuariocreado, $codigo_persona);
-            echo $rspta ? "Datos actualizados correctamente" : "No se pudo actualizar los datos";
+            $msg = $rspta ? "Datos actualizados correctamente" : "No se pudo actualizar los datos";
         }
-        break;
 
+        $grupos = isset($_POST['grupos']) ? json_decode($_POST['grupos'], true) : null;
+        if ($grupos) {
+          $usuario_grupos->set($idusuario, $grupos);
+        }
+
+        echo $msg;
+
+        break;
 
     case 'desactivar':
         $rspta = $usuario->desactivar($idusuario);
@@ -60,6 +64,7 @@ switch ($_GET["op"]) {
 
     case 'mostrar':
         $rspta = $usuario->mostrar($idusuario);
+        $rspta['grupos'] = $usuario_grupos->listarIdsGrupos($idusuario);
         echo json_encode($rspta);
         break;
 
