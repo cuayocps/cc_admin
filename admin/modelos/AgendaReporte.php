@@ -80,10 +80,13 @@ class AgendaReporte
     $sql = "SELECT
         ar.*,
         d.nombre as departamento,
-        CONCAT(u.nombre, ' ', u.apellidos) as usuario FROM {$this->table} as ar
+        CONCAT(u.nombre, ' ', u.apellidos) as usuario,
+        GROUP_CONCAT(agr.id_grupo) grupos
+      FROM {$this->table} as ar
       LEFT JOIN departamento as d ON d.iddepartamento = ar.id_departamento
       LEFT JOIN usuarios as u ON u.idusuario = ar.id_usuario
-      ";
+      LEFT JOIN agenda_reporte_grupos agr ON agr.id_agenda_reporte = ar.id
+      GROUP BY ar.id";
     return consultaEnArray(ejecutarConsulta($sql));
   }
 
