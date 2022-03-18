@@ -1,10 +1,10 @@
 <?php
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx as Excel;
 use Carbon\Carbon;
 
-class ReporteAsistenciaXlsx
+class Xlsx
 {
 
   public function download($nombre, $data)
@@ -62,6 +62,6 @@ class ReporteAsistenciaXlsx
         $sheet->setCellValue("{$cols[6]}{$row}", round($hora['extra'], 2));
       }
     }
-    return new Xlsx($spreadsheet);
+    return new Excel($spreadsheet);
   }
 }

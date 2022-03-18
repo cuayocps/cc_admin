@@ -1,6 +1,6 @@
 <?php
 //incluir la conexion de base de datos
-require "../config/Conexion.php";
+require dirname(__DIR__) . '/config/Conexion.php';
 class Asistencia
 {
 
