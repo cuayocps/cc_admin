@@ -47,10 +47,11 @@ class Usuario
     }
 
     //metodo para mostrar registros
-    public function mostrar($idusuario)
+    public function mostrar($idusuario, array $campos = null)
     {
-        $sql = "SELECT * FROM usuarios WHERE idusuario='$idusuario'";
-        return ejecutarConsultaSimpleFila($sql);
+      $campos = is_null($campos) ? '*' : implode(', ', $campos);
+      $sql = "SELECT $campos FROM usuarios WHERE idusuario='$idusuario'";
+      return ejecutarConsultaSimpleFila($sql);
     }
 
     //listar registros
@@ -101,6 +102,12 @@ class Usuario
       $sql = "SELECT idusuario FROM {$this->table} WHERE codigo_persona = '$codigoPersona'";
       $usuario = ejecutarConsultaSimpleFila($sql);
       return empty($usuario) ? null : $usuario['idusuario'];
+    }
+
+    public function codigo($id_usuario)
+    {
+      $usuario = $this->mostrar($id_usuario, ['codigo_persona']);
+      return $usuario ? $usuario['codigo_persona'] : null;
     }
 
     public function info($codigo_persona, array $campos = null)

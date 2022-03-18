@@ -34,6 +34,9 @@ if (!function_exists('ejecutarConsulta')) {
   {
     global $conexion;
     $query = $conexion->query($sql);
+    if ($conexion->error) {
+      throw new Exception($conexion->error);
+    }
     return $conexion->insert_id;
   }
 
