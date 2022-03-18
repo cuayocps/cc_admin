@@ -2,7 +2,7 @@
 
 use Dompdf\Dompdf;
 
-class ReporteAsistenciaPdf
+class Pdf
 {
 
   public function download($nombre, $data, $subtitle)

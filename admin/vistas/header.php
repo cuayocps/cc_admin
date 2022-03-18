@@ -110,65 +110,21 @@ if (strlen(session_id()) < 1)
           <li class="header">MENÚ DE NAVEGACIÓN</li>
           <li><a href="escritorio.php"><i class="fa  fa-dashboard (alias)"></i> <span>Escritorio</span></a></li>
           <?php if ($_SESSION['tipousuario'] == 'Administrador') { ?>
-            <li class="treeview">
-              <a href="#">
-                <i class="fa fa-folder"></i> <span>Acceso</span>
-                <span class="pull-right-container">
-                  <i class="fa fa-angle-left pull-right"></i>
-                </span>
-              </a>
-              <ul class="treeview-menu">
-                <li><a href="usuario.php"><i class="fa fa-circle-o"></i> Usuarios</a></li>
-                <li><a href="tipousuario.php"><i class="fa fa-circle-o"></i> Tipo Usuario</a></li>
-                <li><a href="departamento.php"><i class="fa fa-circle-o"></i> Departamento</a></li>
-              </ul>
-            </li>
-
-            <li class="treeview">
-              <a href="#">
-                <i class="fa fa-folder"></i> <span>Departamento</span>
-                <span class="pull-right-container">
-                  <i class="fa fa-angle-left pull-right"></i>
-                </span>
-              </a>
-              <ul class="treeview-menu">
-                <li><a href="departamento.php"><i class="fa fa-circle-o"></i> Departamento</a></li>
-              </ul>
-            </li>
-
-            <li class="treeview">
-              <a href="#">
-                <i class="fa fa-folder"></i> <span>Asistencias</span>
-                <span class="pull-right-container">
-                  <i class="fa fa-angle-left pull-right"></i>
-                </span>
-              </a>
-              <ul class="treeview-menu">
-                <li><a href="asistencia.php"><i class="fa fa-circle-o"></i> Asistencia</a></li>
-                <li><a href="rptasistencia.php"><i class="fa fa-circle-o"></i> Reportes</a></li>
-                <li><a href="reporte_asistencia.php"><i class="fa fa-circle-o"></i> Reporte Detallado</a></li>
-              </ul>
-            </li>
+            <li><a href="usuario.php"><i class="fa fa-user"></i> Usuarios</a></li>
+            <li><a href="tipousuario.php"><i class="fa fa-address-card"></i> Tipo Usuario</a></li>
+            <li><a href="departamento.php"><i class="fa fa-users"></i> Departamento</a></li>
+            <li><a href="asistencia.php"><i class="fa fa-clock-o"></i> Asistencia</a></li>
+            <li><a href="rptasistencia.php"><i class="fa fa-th"></i> Reportes</a></li>
+            <li><a href="reporte_asistencia.php"><i class="fa fa-file-excel-o"></i> Reporte Detallado</a></li>
+            <li><a href="agenda_reporte_asistencia.php"><i class="fa fa-calendar-check-o"></i> Agenda Reporte Detallado</a></li>
           <?php } ?>
-          <?php if ($_SESSION['tipousuario'] != 'Administrador') {
-          ?>
-            <li class="treeview">
-              <a href="#">
-                <i class="fa fa-folder"></i> <span>Mis Asistencias</span>
-                <span class="pull-right-container">
-                  <i class="fa fa-angle-left pull-right"></i>
-                </span>
-              </a>
-              <ul class="treeview-menu">
-                <li><a href="asistenciau.php"><i class="fa fa-circle-o"></i> Asistencia</a></li>
-                <li><a href="rptasistenciau.php"><i class="fa fa-circle-o"></i> Reportes</a></li>
-
-              </ul>
-            </li>
+          <?php if ($_SESSION['tipousuario'] != 'Administrador') {          ?>
+            <li><a href="asistenciau.php"><i class="fa fa-circle-o"></i> Asistencia</a></li>
+            <li><a href="rptasistenciau.php"><i class="fa fa-circle-o"></i> Reportes</a></li>
           <?php } ?>
 
-          <li><a href="#"><i class="fa fa-question-circle"></i> <span>Ayuda</span><small class="label pull-right bg-yellow">PDF</small></a></li>
-          <li><a href="https://www.compartiendocodigos.net/"><i class="fa  fa-exclamation-circle"></i> <span>Acerca de</span><small class="label pull-right bg-yellow">ComCod</small></a></li>
+          <!-- <li><a href="#"><i class="fa fa-question-circle"></i> <span>Ayuda</span><small class="label pull-right bg-yellow">PDF</small></a></li> -->
+          <!-- <li><a href="https://www.compartiendocodigos.net/"><i class="fa  fa-exclamation-circle"></i> <span>Acerca de</span><small class="label pull-right bg-yellow">ComCod</small></a></li> -->
 
         </ul>
       </section>
