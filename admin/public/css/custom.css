@@ -7,3 +7,11 @@
 .mt-1 {
   margin-top: 1rem;
 }
+
+.mb-0 {
+  margin-bottom: 0;
+}
+
+.bg-white {
+  background-color: #ffffff;
+}
