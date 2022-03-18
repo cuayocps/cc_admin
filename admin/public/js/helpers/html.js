@@ -38,6 +38,10 @@ var Html = {
       self.addOption($el, '', empty === true ? ' ' : empty)
     }
     _.each(options, function (text, value) {
+      if (_.isObject(text)) {
+        value = text.value;
+        text = text.text;
+      }
       self.addOption($el, value, text, selected == value)
     });
   },
