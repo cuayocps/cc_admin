@@ -25,10 +25,14 @@ class AgendaReporteGrupo
 
   public function eliminarSiNoExiste($id, array $grupos)
   {
-    $listaGrupos = implode(',', $grupos);
+    $and = '';
+    if (!empty($grupos)) {
+      $listaGrupos = implode(',', $grupos);
+      $and = "AND id_grupo NOT IN ($listaGrupos)";
+    }
     $sql = "DELETE FROM {$this->table}
       WHERE id_agenda_reporte = $id
-        AND id_grupo NOT IN ($listaGrupos)";
+        $and";
     ejecutarConsulta($sql);
   }
 

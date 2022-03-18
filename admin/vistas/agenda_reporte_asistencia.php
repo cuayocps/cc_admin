@@ -91,8 +91,14 @@ require 'header.php';
         </div>
         <div class="panel-footer bg-white">
           <div class="text-right">
-            <button class="btn btn-info" type="button" onclick="agenda_reporte_asistencia()"><i class="fa fa-calendar-plus-o" aria-hidden="true"></i>
-              Agendar</button>
+            <button class="btn btn-danger" type="button" onclick="cancelar_reporte_asistencia()" id="reporte-asistencia-cancelar" style="display: none">
+              <i class="fa fa-ban" aria-hidden="true"></i>
+              Cancelar
+            </button>
+            <button class="btn btn-info" type="button" onclick="agendar_reporte_asistencia()">
+              <i class="fa fa-calendar-plus-o" aria-hidden="true"></i>
+              Agendar
+            </button>
           </div>
         </div>
       </div>

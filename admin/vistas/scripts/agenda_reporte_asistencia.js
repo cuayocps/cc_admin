@@ -3,10 +3,12 @@ $.fn.selectpicker.defaults = {
   tickIcon: 'fa-check-circle-o'
 };
 
-function range (from, to, merge) {
+var tablaReportesAgendados;
+
+function range(from, to, merge) {
   var range = {};
   var x = from;
-  while(x<=to) {
+  while (x <= to) {
     range[x] = x;
     ++x;
   }
@@ -58,7 +60,7 @@ const date = {
       text = text.concat(sm.prep).concat(sm.text).toLowerCase();
       key = parts[1];
     } else {
-       sm = this._def_.CURR_MONTH.days.hasOwnProperty(key) ? this._def_.CURR_MONTH : this._def_.CURR_WEEK.days.hasOwnProperty(key) ? this._def_.CURR_WEEK : null;
+      sm = this._def_.CURR_MONTH.days.hasOwnProperty(key) ? this._def_.CURR_MONTH : this._def_.CURR_WEEK.days.hasOwnProperty(key) ? this._def_.CURR_WEEK : null;
     }
     if (!sm || !sm.days.hasOwnProperty(key)) {
       return key;
@@ -113,7 +115,9 @@ function init() {
   $('#id_departamento').on('changed.bs.select', function () {
     var id_departamento = $(this).val();
     $.post("../ajax/asistencia.php?op=selectPersona", { iddepartamento: id_departamento }, function (r) {
+      var selected = $("#id_usuario").val();
       $("#id_usuario").html(r);
+      $("#id_usuario").val(selected);
       $('#id_usuario').selectpicker('refresh');
     });
   }).trigger('changed.bs.select');
@@ -132,16 +136,32 @@ function init() {
     Html.updateOptions('#hasta_dia', date.daysSelectOptions(sm), $('#hasta_dia').val());
   }).trigger('change');
 
-  listar_asistencia();
+  listar_reporte_asistencia();
+
+  $('#reportes_agendados').on('click', '.btn.delete', function () {
+    var $tr = $(this).closest('tr');
+    var row = tablaReportesAgendados.row($tr).data();
+    eliminar_asistencia(row)
+  });
+
+  $('#reportes_agendados').on('click', '.btn.edit', function () {
+    var $tr = $(this).closest('tr');
+    var row = tablaReportesAgendados.row($tr).data();
+    editar_reporte_asistencia(row)
+  });
 }
 
-function agenda_reporte_asistencia() {
-  $('#reporte-asistencia-form').attr('action', '../ajax/agenda_reporte_asistencia.php?op=guardar');
-  $('#reporte-asistencia-form').submit();
+function agendar_reporte_asistencia() {
+  var url = '../ajax/agenda_reporte_asistencia.php?op=guardar';
+  var formData = $('#reporte-asistencia-form').serialize();
+  $.post(url, formData, function (row) {
+    editar_reporte_asistencia(row);
+    tablaReportesAgendados.ajax.reload();
+  }, 'json')
 }
 
-function listar_asistencia() {
-  tabla = $('#reportes_agendados').dataTable({
+function listar_reporte_asistencia() {
+  tablaReportesAgendados = $('#reportes_agendados').dataTable({
     aProcessing: true,
     aServerSide: true,
     dom: 'Brtip',
@@ -159,7 +179,8 @@ function listar_asistencia() {
     columns: [
       {
         data: function (row) {
-          return '<button class="btn btn-danger btn-xs delete"><i class="fa fa-trash"></i></button>'
+          return Html.button(Html.icon('fa fa-trash'), 'btn btn-danger btn-xs delete mr-3') +
+            Html.button(Html.icon('fa fa-pencil'), 'btn btn-default btn-xs edit')
         }
       },
       {
@@ -179,6 +200,59 @@ function listar_asistencia() {
       { data: 'usuario' }
     ]
   }).DataTable();
+}
+
+function eliminar_reporte_asistencia(row) {
+  if (!confirm("Eliminará el reporte. ¿Está seguro?")) {
+    return;
+  }
+  var url = '../ajax/agenda_reporte_asistencia.php?op=eliminar';
+  var formData = { id: row.id };
+  $.post(url, formData, function () {
+    if ($('#id').val() == row.id) {
+      cancelar_reporte_asistencia();
+    }
+    tablaReportesAgendados.ajax.reload();
+  }, 'json')
+}
+
+function editar_reporte_asistencia(row) {
+  $('#reporte-asistencia-cancelar').show();
+  _.forEach(row, function (value, key) {
+    $('#'.concat(key)).val(value);
+    switch (key) {
+      case 'grupos':
+        if (value) {
+          var grupos = value.split(',');
+          if (grupos.length > 1) {
+            $('#grupos').val(grupos);
+          }
+        }
+      case 'id_departamento':
+      case 'id_usuario':
+        $('#'.concat(key)).selectpicker('refresh');
+        break;
+      case 'hora':
+        var parts = value.split(':');
+        $('#hora').val(parseInt(parts[0]));
+        $('#minuto').val(parseInt(parts[1]));
+      case 'desde':
+      case 'hasta':
+        var parts = value.split(',');
+        $('#' + key + '_sm').val(parts[0]).change();
+        $('#' + key + '_dia').val(parts[1]);
+    }
+  })
+}
+
+function cancelar_reporte_asistencia() {
+  $('#reporte-asistencia-form').get(0).reset();
+  $('#id_departamento').selectpicker('refresh');
+  $('#id_usuario').selectpicker('refresh');
+  $('#grupos').selectpicker('refresh');
+  $('#desde_sm').change();
+  $('#hasta_sm').change();
+  $('#reporte-asistencia-cancelar').hide();
 }
 
 init();

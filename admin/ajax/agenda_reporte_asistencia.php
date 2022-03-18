@@ -44,6 +44,8 @@ class AgendaReporteAsistenciaController
     $_POST['hasta'] = "{$_POST['hasta']['sm']},{$_POST['hasta']['dia']}";
     $agenda = $this->agendaReporte->guardar($_POST);
     $this->agendaReporteGrupo->guardar($agenda['id'], $grupos);
+    $agenda['grupos'] = implode(',', $grupos);
+    return $agenda;
   }
 
   public function selectGrupos()
