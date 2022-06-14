@@ -1,0 +1,18 @@
+<?php
+require_once dirname(dirname(__DIR__)) . '/vendor/autoload.php';
+
+define("DB_HOST", "localhost");
+
+define("DB_NAME", "admin_prove");
+
+define("DB_USERNAME", "admin_prove");
+
+define("DB_PASSWORD", "Pr0v3.2021");
+
+define("DB_ENCODE", "utf8");
+
+define('TIMEZONE', 'America/Santiago');
+
+date_default_timezone_set(TIMEZONE);
+
+define('TMP_DIR', '/home/admin/tmp');
